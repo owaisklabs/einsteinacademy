@@ -1,0 +1,181 @@
+<?php
+
+namespace App\Http\Controllers\api;
+
+use App\Http\Controllers\Controller;
+use App\Mail\OtpSendMail;
+use App\Models\User;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+
+class AuthController extends Controller
+{
+    public function register(Request $request)
+    {
+        // dd("here");
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone_number' => 'required',
+            'city' => 'required',
+            'country' => 'required',
+            'grade' => 'required',
+            'password' => 'required',
+            'image' => 'required',
+        ]);
+        if($validator->fails())
+        {
+            return $this->sendError('validation error', $validator->errors());
+        }
+        // dd("here");
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        $user->profile_img = $request->profile_img;
+        $user->phone_number = $request->phone_number;
+        $user->city = $request->city;
+        $user->country = $request->country;
+        $user->grade = $request->grade;
+        $user->institue_name = $request->institue_name;
+        if ($request->hasFile('image') ) {
+            $user->addMediaFromRequest('image')->toMediaCollection('profile_images');
+        }
+        $user_otp= rand(0, 999999);
+        $details = [
+            'token' => $user_otp
+        ];
+        // dd($details);
+        try
+        {
+            Mail::to($request->email)->send(new OtpSendMail($details));
+            $user->user_otp =$user_otp;
+            $user->save();
+        }
+        catch(Exception $e)
+        {
+            return $this->formatResponse('error',$e->getMessage());
+        }
+        return $this->formatResponse('success','user register otp sent',$user_otp);
+    }
+    public function verifyOtp(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+            'otp_code' => 'required |max:6',
+        ]);
+        if($validator->fails()){
+            return $this->sendError('validation error', $validator->errors());
+        }
+        $user = User::where('email',$request->email)->where('user_otp',$request->otp_code)->first();
+        // dd($user);
+        if($user)
+        {
+            if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
+                $user = Auth::user();
+                $success['token'] =  $user->createToken('MyApp')->accessToken;
+                return $this->formatResponse('success','user-login sucessfully',$success);
+            }
+            return $this->formatResponse('error','credentials  not match',null,400);
+        }
+        return $this->formatResponse('error','OTP not match',null,400);
+
+    }
+    public function SignIn(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+        if($validator->fails()){
+            return $this->sendError('validation error', $validator->errors());
+        }
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password]))
+        {
+            $user = Auth::user();
+            $success['token'] =  $user->createToken('MyApp')->accessToken;
+            return $this->formatResponse('success','user-login sucessfully',$success);
+        }
+        else
+        {
+            return $this->formatResponse('error','credentials  not match',null,400);
+        }
+    }
+    public function forgetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
+        if($validator->fails())
+        {
+            return $this->sendError('validation error', $validator->errors());
+        }
+
+        $user= User::where('email',$request->email)->first();
+        $user_otp= rand(0, 9999);
+        $details = [
+            'token' => $user_otp
+        ];
+        try
+        {
+            Mail::to($request->email)->send(new OtpSendMail($details));
+            $user->user_otp =$user_otp;
+            $user->save();
+        }
+        catch(Exception $e)
+        {
+            return $this->formatResponse('error',$e->getMessage());
+        }
+        return $this->formatResponse('success','OTP code sent on email',$user_otp);
+
+    }
+    public function verifyOtpForgetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'new_password' => 'required',
+            'otp_code' => 'required',
+        ]);
+        if($validator->fails())
+        {
+            return $this->sendError('validation error', $validator->errors());
+        }
+        $user = User::where('email',$request->email)->where('user_otp',$request->otp_code)->first();
+        if(!$user){
+            return $this->formatResponse('error','credential not match');
+        }
+        else{
+            // return $user;
+            $new_password = Hash::make($request->new_password);
+            $user->password =$new_password;
+            $user->save();
+            $credentials = [
+                'email' => $request['email'],
+                'password' => $new_password,
+            ];
+            if(Auth::attempt($credentials)){
+                dd('here');
+                $user = Auth::user();
+                $success['token'] =  $user->createToken('MyApp')->accessToken;
+                return $this->formatResponse('success','user-login sucessfully',$success);
+            }
+
+        }
+        // return $user;
+    }
+    public function test()
+    {
+        // return 'hello';
+        $data =[
+            'user'=>User::find(Auth::id()),
+            'imageUrl'=>User::find(Auth::id())->getFirstMedia('profile_images')->getFullUrl(),
+        ];
+        return $this->formatResponse('sucess',null,$data);
+
+    }
+}
