@@ -46,12 +46,8 @@ class StudyMaterialController extends Controller
             return $this->formatResponse('error','validation error', $validator->errors(),400);
         }
         $studyMaterial = new StudyMaterial();
-        if ($request->hasFile('files') ) {
-            $studyMaterial->addMultipleMediaFromRequest(['files'])
-            ->each(function ($fileAdder) {
-                $fileAdder->toMediaCollection('studay_material');
-            });
-        }
+        // if ($request->hasFile('files') ) {
+        // }
         $studyMaterial->user_id = Auth::id();
         $studyMaterial->save();
         dd('done');

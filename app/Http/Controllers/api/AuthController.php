@@ -24,8 +24,7 @@ class AuthController extends Controller
             'city' => 'required',
             'country' => 'required',
             'grade' => 'required',
-            'password' => 'required',
-            'image' => 'required',
+            'password' => 'required'
         ]);
         if($validator->fails())
         {
@@ -42,9 +41,6 @@ class AuthController extends Controller
         $user->country = $request->country;
         $user->grade = $request->grade;
         $user->institue_name = $request->institue_name;
-        if ($request->hasFile('image') ) {
-            $user->addMediaFromRequest('image')->toMediaCollection('profile_images');
-        }
         $user_otp= rand(0, 999999);
         $details = [
             'token' => $user_otp
