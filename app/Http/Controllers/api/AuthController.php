@@ -54,7 +54,7 @@ class AuthController extends Controller
         }
         catch(Exception $e)
         {
-            return $this->formatResponse('error',$e->getMessage());
+            // return $this->formatResponse('error',$e->getMessage());
         }
         return $this->formatResponse('success','user register otp sent',$user_otp);
     }
