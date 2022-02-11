@@ -16,7 +16,8 @@ class StudyMaterialController extends Controller
      */
     public function index()
     {
-
+        $studyMaterial = StudyMaterial::all();
+        return $this->formatResponse('success','get all study materials',$studyMaterial);
     }
 
     /**
@@ -50,7 +51,6 @@ class StudyMaterialController extends Controller
         // }
         $studyMaterial->user_id = Auth::id();
         $studyMaterial->save();
-        dd('done');
     }
 
     /**
