@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Mail\OtpSendMail;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,7 @@ class AuthController extends Controller
         // dd("here");
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email | unique:users,email',
             'phone_number' => 'required',
             'city' => 'required',
             'country' => 'required',
@@ -45,17 +46,8 @@ class AuthController extends Controller
         $details = [
             'token' => $user_otp
         ];
-        // dd($details);
-        try
-        {
-            Mail::to($request->email)->send(new OtpSendMail($details));
-            $user->user_otp =$user_otp;
-            $user->save();
-        }
-        catch(Exception $e)
-        {
-            // return $this->formatResponse('error',$e->getMessage());
-        }
+        $user->user_otp =$user_otp;
+        $user->save();
         return $this->formatResponse('success','user register otp sent',$user_otp);
     }
     public function verifyOtp(Request $request)
@@ -73,7 +65,9 @@ class AuthController extends Controller
         if($user)
         {
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
-                $user = Auth::user();
+                $user = User::find(Auth::id());
+                $user->email_verified_at = Carbon::now();
+                $user->save();
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
                 return $this->formatResponse('success','user-login sucessfully',$success);
             }
@@ -91,9 +85,12 @@ class AuthController extends Controller
         if($validator->fails()){
             return $this->sendError('validation error', $validator->errors());
         }
+
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password]))
         {
             $user = Auth::user();
+            if(!$user->email_verified_at)
+            return $this->formatResponse('error','Email not Verify',null,403);
             $success['token'] =  $user->createToken('MyApp')->accessToken;
             return $this->formatResponse('success','user-login sucessfully',$success);
         }
