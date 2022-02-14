@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\api\AuthController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InitController;
 use App\Http\Controllers\StudyMaterialController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +22,7 @@ Route::middleware('auth:api')->group( function () {
     Route::apiResource('/study-material',StudyMaterialController::class);
 });
 // Route::get('/',[AuthController::class,'test']);
+Route::get('get-data',[InitController::class,'getData']);
 Route::post('signup',[AuthController::class,'register']);
 Route::post('otp-verify',[AuthController::class,'verifyOtp']);
 Route::post('signin',[AuthController::class,'SignIn']);
