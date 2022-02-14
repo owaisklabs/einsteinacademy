@@ -68,6 +68,7 @@ class AuthController extends Controller
                 $user = User::find(Auth::id());
                 $user->email_verified_at = Carbon::now();
                 $user->save();
+                $success['user'] =  $user;
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
                 return $this->formatResponse('success','user-login sucessfully',$success);
             }
@@ -92,6 +93,7 @@ class AuthController extends Controller
             if(!$user->email_verified_at)
             return $this->formatResponse('error','Email not Verify',null,403);
             $success['token'] =  $user->createToken('MyApp')->accessToken;
+            $success['user'] =  $user;
             return $this->formatResponse('success','user-login sucessfully',$success);
         }
         else
@@ -112,18 +114,11 @@ class AuthController extends Controller
         $user= User::where('email',$request->email)->first();
         $user_otp= rand(0, 9999);
         $details = [
-            'token' => $user_otp
+            'token' => $user_otp,
         ];
-        try
-        {
-            Mail::to($request->email)->send(new OtpSendMail($details));
-            $user->user_otp =$user_otp;
-            $user->save();
-        }
-        catch(Exception $e)
-        {
-            return $this->formatResponse('error',$e->getMessage());
-        }
+
+        $user->user_otp =$user_otp;
+        $user->save();
         return $this->formatResponse('success','OTP code sent on email',$user_otp);
 
     }
@@ -154,6 +149,7 @@ class AuthController extends Controller
             if(Auth::attempt($credentials)){
                 $user = Auth::user();
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
+                $success['user'] =  $user;
                 return $this->formatResponse('success','user-login sucessfully',$success);
             }
 
