@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = Hash::make($pass);
     }
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class,'grade_id');
+    }
+
 }

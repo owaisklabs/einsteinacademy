@@ -20,12 +20,12 @@ class AuthController extends Controller
         // dd("here");
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email | unique:users,email',
+            'email' => 'required|email',
             'phone_number' => 'required',
             'city' => 'required',
             'country' => 'required',
-            'grade' => 'required',
-            'password' => 'required'
+            'password' => 'required',
+            'type' => 'required'
         ]);
         if($validator->fails())
         {
@@ -37,10 +37,21 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->password = $request->password;
         $user->profile_img = $request->profile_img;
+        if ($request->type == 0) {
+            $user->type = User::STUDENT;
+        }
+        if ($request->type == 1) {
+            $user->type = User::TEACHER;
+        }
+        if ($request->grade) {
+            $user->grade_id = $request->grade;
+        }
+        if ($request->subject) {
+            # code...
+        }
         $user->phone_number = $request->phone_number;
         $user->city = $request->city;
         $user->country = $request->country;
-        $user->grade = $request->grade;
         $user->institue_name = $request->institue_name;
         $user_otp= rand(0, 999999);
         $details = [
@@ -68,7 +79,7 @@ class AuthController extends Controller
                 $user = User::find(Auth::id());
                 $user->email_verified_at = Carbon::now();
                 $user->save();
-                $success['user'] =  $user;
+                $success['user'] =  User::where('id',Auth::id())->with('grade')->get();
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
                 return $this->formatResponse('success','user-login sucessfully',$success);
             }
@@ -93,7 +104,7 @@ class AuthController extends Controller
             if(!$user->email_verified_at)
             return $this->formatResponse('error','Email not Verify',null,403);
             $success['token'] =  $user->createToken('MyApp')->accessToken;
-            $success['user'] =  $user;
+            $success['user'] =  User::where('id',Auth::id())->with('grade')->get();
             return $this->formatResponse('success','user-login sucessfully',$success);
         }
         else
@@ -149,7 +160,7 @@ class AuthController extends Controller
             if(Auth::attempt($credentials)){
                 $user = Auth::user();
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
-                $success['user'] =  $user;
+                $success['user'] =  User::where('id',Auth::id())->with('grade')->get();
                 return $this->formatResponse('success','user-login sucessfully',$success);
             }
 
