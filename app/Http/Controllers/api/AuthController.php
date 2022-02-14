@@ -147,7 +147,7 @@ class AuthController extends Controller
         }
         else{
             // return $user;
-            $new_password = Hash::make($request->new_password);
+            $new_password = $request->new_password;
             $user->password =$new_password;
             $user->save();
             $credentials = [
@@ -155,7 +155,6 @@ class AuthController extends Controller
                 'password' => $new_password,
             ];
             if(Auth::attempt($credentials)){
-                dd('here');
                 $user = Auth::user();
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
                 return $this->formatResponse('success','user-login sucessfully',$success);
