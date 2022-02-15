@@ -41,6 +41,22 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
+        'public_study_material' => [
+            'driver' => 'local',
+            'root' => public_path('media/study_material'),
+        ],
+        'public_study_notes' => [
+            'driver' => 'local',
+            'root' => public_path('media/study_notes'),
+        ],
+        'public_past_papers' => [
+            'driver' => 'local',
+            'root' => public_path('media/past_papers'),
+        ],
+        'public_user_profile' => [
+            'driver' => 'local',
+            'root' => public_path('media/user_profile'),
+        ],
 
         's3' => [
             'driver' => 's3',
