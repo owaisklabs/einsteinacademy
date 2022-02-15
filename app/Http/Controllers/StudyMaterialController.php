@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\StudyMaterial;
+use App\Models\StudyMaterialMedia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class StudyMaterialController extends Controller
 {
@@ -17,7 +20,7 @@ class StudyMaterialController extends Controller
     public function index()
     {
         $studyMaterial = StudyMaterial::all();
-        return $this->formatResponse('success','get all study materials',$studyMaterial);
+        return $this->formatResponse('success', 'get all study materials', $studyMaterial);
     }
 
     /**
@@ -40,17 +43,31 @@ class StudyMaterialController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'subject' => 'required',
-            'grade' => 'required',
+            'subject_id' => 'required |numeric',
+            'grade_id' => 'required |numeric',
+            'files' => 'required',
         ]);
-        if($validator->fails()){
-            return $this->formatResponse('error','validation error', $validator->errors(),400);
+        if ($validator->fails()) {
+            return $this->formatResponse('error', 'validation error', $validator->errors(), 400);
         }
         $studyMaterial = new StudyMaterial();
-        // if ($request->hasFile('files') ) {
-        // }
         $studyMaterial->user_id = Auth::id();
+        $studyMaterial->title  = $request->title;
+        $studyMaterial->grade_id  = $request->grade_id;
+        $studyMaterial->subject_id  = $request->subject_id;
         $studyMaterial->save();
+        if ($request->file('files')) {
+            foreach ($request->file('files') as $file) {
+                $attachSatResultName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+                Storage::disk('public_study_material')->put($attachSatResultName, \File::get($file));
+                $media = new StudyMaterialMedia();
+                $media->name = $request->file_name;
+                $media->study_material_id = $request->file_name;
+                $media->path = asset('public/media/study_material/'.$attachSatResultName);
+
+            }
+            return asset('public/media/study_material/3pBBddMyJJuAxg69rUii.pdf');
+        }
     }
 
     /**

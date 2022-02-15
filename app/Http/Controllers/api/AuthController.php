@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OtpSendMail;
+use App\Models\TeacherSubject;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -46,9 +47,7 @@ class AuthController extends Controller
         if ($request->grade) {
             $user->grade_id = $request->grade;
         }
-        if ($request->subject) {
-            # code...
-        }
+
         $user->phone_number = $request->phone_number;
         $user->city = $request->city;
         $user->country = $request->country;
@@ -59,6 +58,14 @@ class AuthController extends Controller
         ];
         $user->user_otp =$user_otp;
         $user->save();
+        if ($request->subject) {
+            foreach ($request->subject as $item) {
+                $subject = new TeacherSubject();
+                $subject->subject_id = $item;
+                $subject->user_id = $user->id;
+                $subject->save();
+            }
+        }
         return $this->formatResponse('success','user register otp sent',$user_otp);
     }
     public function verifyOtp(Request $request)
@@ -79,7 +86,7 @@ class AuthController extends Controller
                 $user = User::find(Auth::id());
                 $user->email_verified_at = Carbon::now();
                 $user->save();
-                $success['user'] =  User::where('id',Auth::id())->with('grade')->get();
+                $success['user'] =  User::where('id',Auth::id())->with('grade','subjects')->get();
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
                 return $this->formatResponse('success','user-login sucessfully',$success);
             }
@@ -104,7 +111,7 @@ class AuthController extends Controller
             if(!$user->email_verified_at)
             return $this->formatResponse('error','Email not Verify',null,403);
             $success['token'] =  $user->createToken('MyApp')->accessToken;
-            $success['user'] =  User::where('id',Auth::id())->with('grade')->get();
+            $success['user'] =  User::where('id',Auth::id())->with('grade','subjects')->first();
             return $this->formatResponse('success','user-login sucessfully',$success);
         }
         else
@@ -160,7 +167,7 @@ class AuthController extends Controller
             if(Auth::attempt($credentials)){
                 $user = Auth::user();
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
-                $success['user'] =  User::where('id',Auth::id())->with('grade')->get();
+                $success['user'] =  User::where('id',Auth::id())->with('grade','subjects')->get();
                 return $this->formatResponse('success','user-login sucessfully',$success);
             }
 

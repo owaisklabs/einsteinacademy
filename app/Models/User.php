@@ -54,5 +54,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Grade::class,'grade_id');
     }
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class,'teacher_subjects','user_id','subject_id');
+    }
 
 }
