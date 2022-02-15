@@ -14,7 +14,7 @@ class InitController extends Controller
         $subject = Subject::all();
 
         return [
-            'garde'=>$grade,
+            'grade'=>$grade,
             'subject'=>$subject
         ];
     }
