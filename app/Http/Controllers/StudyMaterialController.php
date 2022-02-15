@@ -19,7 +19,7 @@ class StudyMaterialController extends Controller
      */
     public function index()
     {
-        $studyMaterial = StudyMaterial::all();
+        $studyMaterial = StudyMaterial::with('user','grade','user','subject','Medias')->get();
         return $this->formatResponse('success', 'get all study materials', $studyMaterial);
     }
 
@@ -28,10 +28,7 @@ class StudyMaterialController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        return "index";
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -62,11 +59,12 @@ class StudyMaterialController extends Controller
                 Storage::disk('public_study_material')->put($attachSatResultName, \File::get($file));
                 $media = new StudyMaterialMedia();
                 $media->name = $request->file_name;
-                $media->study_material_id = $request->file_name;
+                $media->study_material_id = $studyMaterial->id;
                 $media->path = asset('public/media/study_material/'.$attachSatResultName);
+                $media->save();
 
             }
-            return asset('public/media/study_material/3pBBddMyJJuAxg69rUii.pdf');
+            return $this->formatResponse('sucess','Study material-add-sucessfully');
         }
     }
 
@@ -76,9 +74,11 @@ class StudyMaterialController extends Controller
      * @param  \App\Models\StudyMaterial  $studyMaterial
      * @return \Illuminate\Http\Response
      */
-    public function show(StudyMaterial $studyMaterial)
+    public function show($id)
     {
-        return "show";
+        $studyMaterial = StudyMaterial::where('id',$id)
+        ->with('grade','subject','Medias','user')->first();
+        return $this->formatResponse('success', 'get all study materials', $studyMaterial);
     }
 
 
