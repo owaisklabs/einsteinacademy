@@ -24,6 +24,7 @@ Route::middleware('auth:api')->group( function () {
 // Route::get('/',[AuthController::class,'test']);
 Route::get('get-data',[InitController::class,'getData']);
 Route::post('signup',[AuthController::class,'register']);
+Route::post('resend-otp',[AuthController::class,'resendOtp']);
 Route::post('otp-verify',[AuthController::class,'verifyOtp']);
 Route::post('signin',[AuthController::class,'SignIn']);
 Route::post('forget-password',[AuthController::class,'forgetPassword']);

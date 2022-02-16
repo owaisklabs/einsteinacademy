@@ -68,6 +68,25 @@ class AuthController extends Controller
         }
         return $this->formatResponse('success','user register otp sent',$user_otp);
     }
+    public function resendOtp(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
+        if($validator->fails())
+        {
+            return $this->sendError('validation error', $validator->errors());
+        }
+
+        $user_otp= rand(0, 999999);
+        $details = [
+            'token' => $user_otp
+        ];
+        $user=User::where('email',$request->email)->first();
+        $user->user_otp =$user_otp;
+        $user->save();
+        return $this->formatResponse('success','user register otp sent',$user_otp);
+    }
     public function verifyOtp(Request $request)
     {
         $validator = Validator::make($request->all(), [
