@@ -21,7 +21,7 @@ class AuthController extends Controller
         // dd("here");
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email | unique:users,email',
             'phone_number' => 'required',
             'city' => 'required',
             'country' => 'required',
