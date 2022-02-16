@@ -52,7 +52,7 @@ class AuthController extends Controller
         $user->city = $request->city;
         $user->country = $request->country;
         $user->institue_name = $request->institue_name;
-        $user_otp= rand(0, 999999);
+        $user_otp= rand(0, 9999);
         $details = [
             'token' => $user_otp
         ];
@@ -78,7 +78,7 @@ class AuthController extends Controller
             return $this->sendError('validation error', $validator->errors());
         }
 
-        $user_otp= rand(0, 999999);
+        $user_otp= rand(0, 9999);
         $details = [
             'token' => $user_otp
         ];
