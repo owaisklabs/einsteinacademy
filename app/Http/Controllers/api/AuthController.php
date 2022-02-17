@@ -131,9 +131,9 @@ class AuthController extends Controller
             return $this->formatResponse('error','Email not Verify',null,403);
             $success['token'] =  $user->createToken('MyApp')->accessToken;
             $success['user'] =  User::where('id',Auth::id())->with('grade','subjects')->first();
-            return response()->json([
-                'data' => $success,
-            ]);
+            // return response()->json([
+            //     'data' => $success,
+            // ]);
             return $this->formatResponse('success','user-login sucessfully',$success);
         }
         else
