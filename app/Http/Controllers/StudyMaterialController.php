@@ -43,6 +43,7 @@ class StudyMaterialController extends Controller
             'subject_id' => 'required |numeric',
             'grade_id' => 'required |numeric',
             'files' => 'required',
+            'type' => 'required',
         ]);
         if ($validator->fails()) {
             return $this->formatResponse('error', 'validation error', $validator->errors(), 400);
@@ -52,6 +53,7 @@ class StudyMaterialController extends Controller
         $studyMaterial->title  = $request->title;
         $studyMaterial->grade_id  = $request->grade_id;
         $studyMaterial->subject_id  = $request->subject_id;
+        $studyMaterial->type  = $request->type;
         $studyMaterial->save();
         if ($request->file('files')) {
             foreach ($request->file('files') as $file) {
@@ -62,7 +64,6 @@ class StudyMaterialController extends Controller
                 $media->study_material_id = $studyMaterial->id;
                 $media->path = asset('public/media/study_material/'.$attachSatResultName);
                 $media->save();
-
             }
             return $this->formatResponse('sucess','Study material-add-sucessfully');
         }
