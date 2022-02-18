@@ -10,7 +10,7 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
-    public function formatResponse($status,$message=null,$data=null,$code=200)
+    public function formatResponse($status,$message=null,$data=[],$code=200)
     {
         return [
             'status'=>$status,
