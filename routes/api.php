@@ -4,6 +4,8 @@ use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InitController;
 use App\Http\Controllers\StudyMaterialController;
+use App\Http\Controllers\StudyNoteController;
+use App\Http\Controllers\UserActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->group( function () {
     Route::get('/test',[AuthController::class,'test']);
     Route::apiResource('/study-material',StudyMaterialController::class);
+    Route::apiResource('/study-notes',StudyNoteController::class);
+    Route::post('rating',[UserActivity::class,'rating']);
 });
 // Route::get('/',[AuthController::class,'test']);
 Route::get('get-data',[InitController::class,'getData']);
