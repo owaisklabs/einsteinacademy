@@ -79,7 +79,7 @@ class StudyMaterialController extends Controller
      */
     public function show($id)
     {
-        $studyMaterial = StudyMaterial::where('id',$id)
+        $studyMaterial['study-material'] = StudyMaterial::where('id',$id)
         ->with('grade','subject','Medias','user')->first();
         $studyMaterial['rating'] = StudyMaterialRating::where('study_material_id',$id)->avg('rating');
         if( $studyMaterial['rating'] == NULL)
