@@ -30,7 +30,7 @@ class UserActivity extends Controller
         }
         if($request->type =="study-material"){
             $studyMaterialRating = new  StudyMaterialRating();
-            $studyMaterialRating->study_notes_id = $request->id;
+            $studyMaterialRating->study_material_id = $request->id;
             $studyMaterialRating->rating = $request->rating;
             $studyMaterialRating->user_id = Auth::id();
             $studyMaterialRating->save();
