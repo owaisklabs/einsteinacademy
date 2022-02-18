@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\StudyMaterial;
 use App\Models\StudyMaterialMedia;
+use App\Models\StudyNotesRating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -79,6 +80,9 @@ class StudyMaterialController extends Controller
     {
         $studyMaterial = StudyMaterial::where('id',$id)
         ->with('grade','subject','Medias','user')->first();
+        $studyMaterial['rating'] = StudyNotesRating::where('study_material_id',$id)->avg('rating');
+        if( $studyMaterial['rating'] == NULL)
+        $studyMaterial['rating'] =0;
         return $this->formatResponse('success', 'get all study materials', $studyMaterial);
     }
 
