@@ -90,7 +90,7 @@ class StudyNoteController extends Controller
         $studyNotes['rating'] = StudyNotesRating::where('study_notes_id',$id)->avg('rating');
         if( $studyNotes['rating'] == NULL)
         $studyNotes['rating'] =0;
-        return $this->formatResponse('success','study note get',$studyNotes);
+        return $this->formatResponse('success','study note get',number_format($studyNotes,1,'.',''));
     }
 
     /**
