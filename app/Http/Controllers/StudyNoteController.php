@@ -84,7 +84,7 @@ class StudyNoteController extends Controller
     public function show($id)
     {
 
-        $studyNotes['study-notes'] = StudyNote::where('id',$id)
+        $studyNotes = StudyNote::where('id',$id)
         ->with('user','grade','subject','medias')
         ->first();
         $studyNotes['rating'] = StudyNotesRating::where('study_notes_id',$id)->avg('rating');
