@@ -49,6 +49,7 @@ class StudyNoteController extends Controller
             'subject_id' => 'required |numeric',
             'grade_id' => 'required |numeric',
             'files' => 'required',
+            'type' => 'required',
         ]);
         if ($validator->fails()) {
             return $this->formatResponse('error', 'validation error', $validator->errors(), 400);
@@ -58,6 +59,7 @@ class StudyNoteController extends Controller
         $studyNote->title  = $request->title;
         $studyNote->grade_id  = $request->grade_id;
         $studyNote->subject_id  = $request->subject_id;
+        $studyNote->type  = $request->type;
         $studyNote->save();
         if ($request->file('files')) {
             foreach ($request->file('files') as $file) {
