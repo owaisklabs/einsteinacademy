@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Followe;
 use App\Models\StudyMaterialRating;
 use App\Models\StudyNotesRating;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -40,5 +42,58 @@ class UserActivity extends Controller
 
         }
 
+    }
+    public function follow($id)
+    {
+        $check= Followe::where('user_id',Auth::id())->where('follower_id',$id)->get();
+        // return $check;
+        if($check->isEmpty())
+        {
+            $user= User::find(Auth::id());
+            $user->followers()->attach($id);
+            return $this->formatResponse('sucess','follow sucessfull');
+        }
+        else{
+            $user= User::find(Auth::id());
+            $user->followers()->detach($id);
+            return $this->formatResponse('sucess','un follow sucessfull');
+        }
+    }
+    public function userProfile($id)
+    {
+        $user = User::where('id',$id)->first();
+        if($user && $user->type == User::STUDENT)
+        {
+            $user = User::where('id',$id)
+            ->with('studyMaterials.grade','studyMaterials.subject')
+            ->first();
+            return $this->formatResponse('success','user-profile',$user);
+        }
+        if($user && $user->type == User::TEACHER)
+        {
+            $user = User::where('id',$id)
+            ->with('studyMaterials.grade','studyMaterials.subject')
+            ->first();
+            return $this->formatResponse('success','user-profile',$user);
+        }
+    }
+    public function userProfileUpdate(Request $request,$id)
+    {
+        $user = User::where('id',$id)->first();
+        if ($request->name) {
+
+        }
+        if ($request->grade) {
+
+        }
+        if ($request->name) {
+
+        }
+        if ($request->name) {
+
+        }
+        if ($request->name) {
+
+        }
     }
 }

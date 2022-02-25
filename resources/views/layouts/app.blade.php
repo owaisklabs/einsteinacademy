@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <title>{{ config('app.name') }}</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
           integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
           crossorigin="anonymous"/>
-          <script src="{{ mix('js/app.js') }}" defer></script>
+          <script src="{{ url('js/app.js') }}" defer></script>
           <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
 
 
 
-    <link href="{{url()}}{{ mix('css/app.css') }}" rel="stylesheet">
+    <link href="{{url('css/app.css')}}" rel="stylesheet">
 @yield('third_party_stylesheets')
 
     @stack('page_css')

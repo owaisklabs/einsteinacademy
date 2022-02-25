@@ -25,7 +25,7 @@
                         <td>{{ $item->email }}</td>
                         <td>{{ $item->city }}</td>
                         <td>{{ $item->country }}</td>
-                        <td>{{ $item->grade }}</td>
+                        <td>{{ @$item->grade->name }}</td>
                         <td>{{ $item->institue_name }}</td>
                         <td>
 
@@ -128,7 +128,7 @@
                 url: "{{ url('user') }}" + '/' + id,
                 data: '_token = <?php echo csrf_token(); ?>',
                 success: function(data) {
-                    console.log(data.country);
+                    console.log(data);
                     $('#exampleModal .modal-body #name').val(data.name)
                     $('#exampleModal .modal-body #email').val(data.email)
                     $('#exampleModal .modal-body #type').val(data.type)
