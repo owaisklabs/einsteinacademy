@@ -82,7 +82,6 @@ class UserActivity extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'phone_number' => 'required',
-            'city' => 'required',
             'country' => 'required',
             'institute' => 'required',
         ]);
@@ -106,5 +105,6 @@ class UserActivity extends Controller
             $user->institue_name =$request->institute;
         }
         $user->save();
+        return $this->formatResponse('success','user-get',Auth::user());
     }
 }
