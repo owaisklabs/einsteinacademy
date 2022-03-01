@@ -79,21 +79,32 @@ class UserActivity extends Controller
     }
     public function userProfileUpdate(Request $request,$id)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'phone_number' => 'required',
+            'city' => 'required',
+            'country' => 'required',
+            'institute' => 'required',
+        ]);
+        if($validator->fails()){
+            return $this->sendError('validation error', $validator->errors());
+        }
         $user = User::where('id',$id)->first();
         if ($request->name) {
-
+            $user->name = $request->name;
         }
-        if ($request->grade) {
-
+        if ($request->phone_number) {
+            $user->phone_number = $request->phone_number;
         }
-        if ($request->name) {
-
+        if ($request->city) {
+            $user->city =$request->city;
         }
-        if ($request->name) {
-
+        if ($request->country) {
+            $user->country=$request->country;
         }
-        if ($request->name) {
-
+        if ($request->institute) {
+            $user->institue_name =$request->institute;
         }
+        $user->save();
     }
 }
