@@ -79,7 +79,7 @@ class UserActivity extends Controller
             'country' => 'required',
             'institute' => 'required',
         ]);
-        return $request->all();
+        // return $request->all();
         if ($validator->fails()) {
             return $this->sendError('validation error', $validator->errors());
         }
