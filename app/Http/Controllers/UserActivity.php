@@ -91,6 +91,20 @@ class UserActivity extends Controller
         $user->country = $request->country;
         $user->institue_name = $request->institute;
         $user->save();
-        return $this->formatResponse('success', 'user-get', Auth::user());
+        $user::User::find(Auth::id());
+        return $this->formatResponse('success', 'user-get', $user);
+    }
+    public function profilePicUpdate(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'profile-img' => 'required|max:10000|mimes:doc,docx'
+
+            ,
+        ]);
+        // return $request->all();
+        if ($validator->fails()) {
+            return $this->sendError('validation error', $validator->errors());
+        }
     }
 }
