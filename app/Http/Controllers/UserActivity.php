@@ -79,7 +79,6 @@ class UserActivity extends Controller
     }
     public function userProfileUpdate(Request $request,$id)
     {
-        dd("here");
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'phone_number' => 'required',
