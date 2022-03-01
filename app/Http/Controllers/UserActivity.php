@@ -91,7 +91,7 @@ class UserActivity extends Controller
         $user->country = $request->country;
         $user->institue_name = $request->institute;
         $user->save();
-        $userData=User::where(';id',Auth::id())->first();
+        $userData=User::where('id',Auth::id())->first();
         return $this->formatResponse('success', 'user-get', $userData);
     }
     public function profilePicUpdate(Request $request)
