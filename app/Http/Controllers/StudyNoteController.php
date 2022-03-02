@@ -22,7 +22,7 @@ class StudyNoteController extends Controller
      */
     public function index()
     {
-        $studyNotes = StudyNote::paginate(15);
+        $studyNotes = StudyNote::with('user','grade','subject')->paginate(15);
         return $this->formatResponse('sucsess','all study note get',$studyNotes);
     }
 
