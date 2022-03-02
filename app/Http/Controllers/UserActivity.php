@@ -91,7 +91,7 @@ class UserActivity extends Controller
         $user->country = $request->country;
         $user->institue_name = $request->institute;
         $user->save();
-        $userData=User::where('id',Auth::id())->first();
+        $userData=User::where('id',Auth::id())->with('grade','subjects')->first();
         return $this->formatResponse('success', 'user-get', $userData);
     }
     public function profilePicUpdate(Request $request)
@@ -99,8 +99,6 @@ class UserActivity extends Controller
 
         $validator = Validator::make($request->all(), [
             'profile-img' => 'required|max:10000|mimes:doc,docx'
-
-            ,
         ]);
         // return $request->all();
         if ($validator->fails()) {
