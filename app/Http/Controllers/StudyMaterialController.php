@@ -21,7 +21,7 @@ class StudyMaterialController extends Controller
      */
     public function index()
     {
-        $studyMaterial = StudyMaterial::with('user','garde','subject')->get();
+        $studyMaterial = StudyMaterial::with('user','grade','subject')->get();
         return $this->formatResponse('success', 'get all study materials', $studyMaterial);
     }
 
