@@ -8,7 +8,9 @@ use App\Models\StudyNotesRating;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class UserActivity extends Controller
 {
@@ -96,13 +98,24 @@ class UserActivity extends Controller
     }
     public function profilePicUpdate(Request $request)
     {
-
+        // dd($request->all());
         $validator = Validator::make($request->all(), [
-            'profile-img' => 'required|max:10000|mimes:doc,docx'
+            'profile-img' => 'required|max:10000|mimes:jpg,jpeg,png'
         ]);
         // return $request->all();
         if ($validator->fails()) {
             return $this->sendError('validation error', $validator->errors());
         }
+        $file=$request->file('profile-img');
+        $user = User::find(Auth::id());
+        Storage::disk('public_user_profile')->delete($user->profile_img);
+        $userProfileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+        Storage::disk('public_user_profile')->put($userProfileName, \File::get($file));
+        $user->profile_img =url('media/user_profile/'.$userProfileName);
+        $user->save();
+        $user= User::where('id',Auth::id())
+        ->with('grade','subjects')
+        ->first();
+        return $this->formatResponse('success','profile-imge-update',$user);
     }
 }

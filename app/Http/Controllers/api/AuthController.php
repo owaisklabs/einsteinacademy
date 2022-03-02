@@ -12,7 +12,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
 
 class AuthController extends Controller
 {
@@ -26,7 +29,8 @@ class AuthController extends Controller
             'city' => 'required',
             'country' => 'required',
             'password' => 'required',
-            'type' => 'required'
+            'type' => 'required',
+            'profile_img' => 'required'
         ]);
         if($validator->fails())
         {
@@ -37,7 +41,11 @@ class AuthController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password;
-        $user->profile_img = $request->profile_img;
+        $file=$request->file('profile_img');
+        $userProfileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+        Storage::disk('public_user_profile')->put($userProfileName, \File::get($file));
+        $user->profile_img =url('media/user_profile/'.$userProfileName);
+
         if ($request->type == 0) {
             $user->type = User::STUDENT;
         }
