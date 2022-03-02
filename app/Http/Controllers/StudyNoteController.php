@@ -88,8 +88,8 @@ class StudyNoteController extends Controller
         ->with('user','grade','subject','medias')
         ->first();
         $studyNotes['rating'] = StudyNotesRating::where('study_notes_id',$id)->avg('rating');
-         $studyNotes['rating'] = (float) $studyNotes['rating'];
-         $studyNotes['rating'] = number_format( $studyNotes['rating'],1);
+        //  $studyNotes['rating'] = (float) $studyNotes['rating'];
+         $studyNotes['rating'] =   (float)number_format($studyNotes['rating'], 2, '.', ' ');
         return $this->formatResponse('success','study note get',$studyNotes);
     }
 

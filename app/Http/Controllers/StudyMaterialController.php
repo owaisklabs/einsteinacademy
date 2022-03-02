@@ -84,7 +84,7 @@ class StudyMaterialController extends Controller
         $studyMaterial['rating'] = StudyMaterialRating::where('study_material_id',$id)->avg('rating');
         if( $studyMaterial['rating'] == NULL)
         $studyMaterial['rating'] =0;
-        $studyMaterial['rating'] = number_format( $studyMaterial['rating'],1);
+        $studyMaterial['rating'] =   (float)number_format($studyMaterial['rating'], 2, '.', ' ');
         return $this->formatResponse('success', 'get all study materials', $studyMaterial);
     }
 
