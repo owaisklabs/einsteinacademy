@@ -127,7 +127,8 @@ class UserActivity extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'link' => 'required',
+            'meeting_id' => 'required',
+            'meeting_pass' => 'required',
             'date_time' => 'required',
         ]);
         // return $request->all();
@@ -138,7 +139,8 @@ class UserActivity extends Controller
         $zoom->title = $request->title;
         $zoom->description = $request->description;
         $zoom->date_and_time = $request->date_time;
-        $zoom->link = $request->link;
+        $zoom->meeting_id = $request->meeting_id;
+        $zoom->meeting_pass = $request->meeting_pass;
         $zoom->user_id =Auth::id();
         if($request->file('img')){
             $file = $request->file('img');
