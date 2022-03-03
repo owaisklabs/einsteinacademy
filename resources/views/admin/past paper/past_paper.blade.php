@@ -4,7 +4,7 @@
         <div class="d-flex spacearound">
             <h2 class="text-black-50 mt-2">Past Papers</h2>
 
-            <a class="btn btn-app bg-success mt-4" href="{{route('past-paper.create')}}">
+            <a class="btn btn-app bg-primary mt-4" href="{{route('past-paper.create')}}">
                 <i class="fas fa-plus"></i> Add Past Paper
             </a>
         </div>

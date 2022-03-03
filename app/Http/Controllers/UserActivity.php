@@ -6,6 +6,7 @@ use App\Models\Followe;
 use App\Models\StudyMaterialRating;
 use App\Models\StudyNotesRating;
 use App\Models\User;
+use App\Models\Zoom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -60,10 +61,14 @@ class UserActivity extends Controller
     public function userProfile($id)
     {
         $user = User::where('id', $id)->first();
+        $followers = $user->followers->count();
+        $followings = $user->followings->count();
         if ($user && $user->type == User::STUDENT) {
             $user = User::where('id', $id)
                 ->with('studyMaterials.grade', 'studyMaterials.subject')
                 ->first();
+            $user['followers'] = $followers;
+            $user['followings'] = $followings;
             return $this->formatResponse('success', 'user-profile', $user);
         }
         if ($user && $user->type == User::TEACHER) {
@@ -93,7 +98,7 @@ class UserActivity extends Controller
         $user->country = $request->country;
         $user->institue_name = $request->institute;
         $user->save();
-        $userData=User::where('id',Auth::id())->with('grade','subjects')->first();
+        $userData = User::where('id', Auth::id())->with('grade', 'subjects')->first();
         return $this->formatResponse('success', 'user-get', $userData);
     }
     public function profilePicUpdate(Request $request)
@@ -106,16 +111,47 @@ class UserActivity extends Controller
         if ($validator->fails()) {
             return $this->sendError('validation error', $validator->errors());
         }
-        $file=$request->file('profile-img');
+        $file = $request->file('profile-img');
         $user = User::find(Auth::id());
         Storage::disk('public_user_profile')->delete($user->profile_img);
         $userProfileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
         Storage::disk('public_user_profile')->put($userProfileName, \File::get($file));
-        $user->profile_img =url('media/user_profile/'.$userProfileName);
+        $user->profile_img = url('media/user_profile/' . $userProfileName);
         $user->save();
-        $user= User::where('id',Auth::id())
-        ->with('grade','subjects')
-        ->first();
-        return $this->formatResponse('success','profile-imge-update',$user);
+        $user = User::where('id', Auth::id())
+            ->with('grade', 'subjects')
+            ->first();
+        return $this->formatResponse('success', 'profile-imge-update', $user);
+    }
+    public function createZoomEvent(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'link' => 'required',
+            'date_time' => 'required',
+        ]);
+        // return $request->all();
+        if ($validator->fails()) {
+            return $this->sendError('validation error', $validator->errors());
+        }
+        $zoom = new Zoom();
+        $zoom->title = $request->title;
+        $zoom->description = $request->description;
+        $zoom->date_and_time = $request->date_time;
+        $zoom->link = $request->link;
+        $zoom->user_id =Auth::id();
+        if($request->file('img')){
+            $file = $request->file('img');
+            $zoomImg = Str::random(20) . '.' . $file->getClientOriginalExtension();
+            Storage::disk('public_zoom_img')->put($zoomImg, \File::get($file));
+            $zoom->img = url('media/zoom_imgs/' . $zoomImg);
+        }
+        $zoom->save();
+        return $this->formatResponse('success','zoom created sucessfully',$zoom);
+    }
+    public function getZoomEvents()
+    {
+        $zoomEvents = Zoom::latest()->get();
+        return $this->formatResponse('success','zoom events get sucessfully',$zoomEvents);
     }
 }

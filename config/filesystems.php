@@ -57,7 +57,10 @@ return [
             'driver' => 'local',
             'root' => public_path('media/user_profile'),
         ],
-
+        'public_zoom_img' => [
+            'driver' => 'local',
+            'root' => public_path('media/zoom_imgs'),
+        ],
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

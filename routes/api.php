@@ -22,15 +22,22 @@ use Illuminate\Support\Facades\Route;
 */
 Route::middleware('auth:api')->group( function () {
     Route::get('/test',[AuthController::class,'test']);
+
     Route::apiResource('/study-material',StudyMaterialController::class);
+
     Route::apiResource('/study-notes',StudyNoteController::class);
-    Route::post('rating',[UserActivity::class,'rating']);
+
     Route::get('past-paper',[PastPaperController::class,'indexApi']);
     Route::get('past-paper/{id}',[PastPaperController::class,'showApi']);
+
+    Route::post('rating',[UserActivity::class,'rating']);
     Route::get('follow/{id}',[UserActivity::class,'follow']);
     Route::get('user-profile/{id}',[UserActivity::class,'userProfile']);
     Route::put('user-profile-update/{id}',[UserActivity::class,'userProfileUpdate']);
     Route::post('profile-pic-update/{id}',[UserActivity::class,'profilePicUpdate']);
+
+    Route::post('zoom-event',[UserActivity::class,'createZoomEvent']);
+    Route::get('zoom-event',[UserActivity::class,'getZoomEvents']);
 });
 // Route::get('/',[AuthController::class,'test']);
 Route::get('get-data',[InitController::class,'getData']);
