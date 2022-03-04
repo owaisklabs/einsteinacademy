@@ -153,7 +153,12 @@ class UserActivity extends Controller
     }
     public function getZoomEvents()
     {
-        $zoomEvents = Zoom::latest()->get();
+        $zoomEvents = Zoom::latest()->with('user')->get();
         return $this->formatResponse('success','zoom events get sucessfully',$zoomEvents);
+    }
+    public function deleteZoomEvents($id)
+    {
+        $zoomEvent = Zoom::where('id',$id)->delete();
+        return $this->formatResponse('success','zoom events delete sucessfully');
     }
 }

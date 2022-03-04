@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Zoom extends Model
 {
     use HasFactory;
+    public function user()
+    {
+        return $this->belongsTo(user::class,'user_id');
+    }
 }
