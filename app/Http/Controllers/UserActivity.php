@@ -60,26 +60,29 @@ class UserActivity extends Controller
     }
     public function userProfile($id)
     {
-        $student = User::where('id', $id)->first();
-        $followers = $student->followers->count();
-        $followings = $student->followings->count();
-        if ($student && $student->type == User::STUDENT) {
-            $student = User::where('id', $id)
-                ->with('studyMaterials.grade', 'studyMaterials.subject')
+        // dd(auth()->user);
+        $user = User::where('id', $id)->first();
+
+        if ($user && $user->type == User::STUDENT) {
+            $users = User::where('id', $id)
+                ->with('studyNotes.grade', 'studyNotes.subject')
                 ->first();
-            $student['followers'] = $followers;
-            $student['followings'] = $followings;
-            return $this->formatResponse('success', 'user-profile', $user);
+            $follower = $user->followers->count();
+            $following = $user->followings->count();
+            // dd($follower,$following);
+            $users['user-follow'] = $follower;
+            $users['user-following'] = $following;
+            return $this->formatResponse('success', 'user-profile', $users);
         }
-        if ($teacher && $teacher->type == User::TEACHER) {
-            $teacher = User::where('id', $id)
+        if ($user && $user->type == User::TEACHER) {
+            $users = User::where('id', $id)
                 ->with('studyMaterials.grade', 'studyMaterials.subject')
                 ->first();
-            $followers = $teacher->followers->count();
-            $followings = $teacher->followings->count();
-            $teacher['followers'] = $followers;
-            $teacher['followings'] = $followings;
-            return $this->formatResponse('success', 'user-profile', $user);
+            $follower = $user->followers->count();
+            $following= $user->followings->count();
+            $users['user-follow'] = $follower;
+            $users['user-following'] = $following;
+            return $this->formatResponse('success', 'user-profile', $users);
         }
     }
     public function userProfileUpdate(Request $request, $id)
