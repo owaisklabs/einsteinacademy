@@ -26,6 +26,7 @@ class UserActivity extends Controller
             return $this->sendError('validation error', $validator->errors());
         }
         if ($request->type == "study-notes") {
+
             $studyNotesRating = new  StudyNotesRating();
             $studyNotesRating->study_notes_id = $request->id;
             $studyNotesRating->rating = $request->rating;
@@ -168,8 +169,12 @@ class UserActivity extends Controller
         $zoomEvent = Zoom::where('id',$id)->delete();
         return $this->formatResponse('success','zoom events delete sucessfully');
     }
-    public function followList($id)
+    public function followerList($id)
     {
-        return $id;
+        return User::where('id',$id)->with('followers')->get();
+    }
+    public function followingList($id)
+    {
+        return User::where('id',$id)->select('id')->with(['followings'])->get();
     }
 }
