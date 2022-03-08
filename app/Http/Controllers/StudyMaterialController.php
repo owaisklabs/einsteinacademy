@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StudyMaterial;
+use App\Models\User;
 use App\Models\StudyMaterialMedia;
 use App\Models\StudyMaterialRating;
 use App\Models\StudyNotesRating;
@@ -21,10 +22,18 @@ class StudyMaterialController extends Controller
      */
     public function index()
     {
-        $studyMaterial = StudyMaterial::with('user','grade','subject')->paginate(15);
+        $studyMaterial = StudyMaterial::all();
+        $studyMaterialdata =[];
+        foreach ($studyMaterial as $key => $value) {
+            $studyMaterialdatas['studymaterial']= StudyMaterial::find($value->id);
+            $studyMaterialdatas['user']= User::find($value->user_id);
+            $studyMaterialdatas['is_follow']= User::isFollowed($value->user_id);
+            array_push($studyMaterialdata,$studyMaterialdatas);
+        }
+        return $studyMaterialdata;
         return $this->formatResponse('success', 'get all study materials', $studyMaterial);
     }
-
+    
     /**
      * Show the form for creating a new resource.
      *

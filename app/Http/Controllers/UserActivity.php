@@ -75,6 +75,10 @@ class UserActivity extends Controller
             $user = User::where('id', $id)
                 ->with('studyMaterials.grade', 'studyMaterials.subject')
                 ->first();
+            $followers = $user->followers->count();
+            $followings = $user->followings->count();
+            $user['followers'] = $followers;
+            $user['followings'] = $followings;
             return $this->formatResponse('success', 'user-profile', $user);
         }
     }
@@ -160,5 +164,9 @@ class UserActivity extends Controller
     {
         $zoomEvent = Zoom::where('id',$id)->delete();
         return $this->formatResponse('success','zoom events delete sucessfully');
+    }
+    public function followList($id)
+    {
+        return $id;
     }
 }

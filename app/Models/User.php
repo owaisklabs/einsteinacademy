@@ -75,4 +75,14 @@ class User extends Authenticatable
         return $this->hasMany(StudyNote::class,'user_id');
     }
 
+    public static function isFollowed($follower_id){
+        // return auth()->user()->id;
+        $followed=false;
+        $followed=Followe::where('follower_id',$follower_id)->where('user_id',auth()->user()->id)->first();
+        if($followed!=null){
+            return true;
+        }
+        return false;
+    }
+
 }

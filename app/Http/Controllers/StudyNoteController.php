@@ -71,7 +71,7 @@ class StudyNoteController extends Controller
                 $media->path = asset('public/media/study_notes/'.$attachSatResultName);
                 $media->save();
             }
-            return $this->formatResponse('sucess','Study material-add-sucessfully');
+            return $this->formatResponse('success','Study material-add-sucessfully');
         }
     }
 
