@@ -60,25 +60,25 @@ class UserActivity extends Controller
     }
     public function userProfile($id)
     {
-        $user = User::where('id', $id)->first();
-        $followers = $user->followers->count();
-        $followings = $user->followings->count();
-        if ($user && $user->type == User::STUDENT) {
-            $user = User::where('id', $id)
+        $student = User::where('id', $id)->first();
+        $followers = $student->followers->count();
+        $followings = $student->followings->count();
+        if ($student && $student->type == User::STUDENT) {
+            $student = User::where('id', $id)
                 ->with('studyMaterials.grade', 'studyMaterials.subject')
                 ->first();
-            $user['followers'] = $followers;
-            $user['followings'] = $followings;
+            $student['followers'] = $followers;
+            $student['followings'] = $followings;
             return $this->formatResponse('success', 'user-profile', $user);
         }
-        if ($user && $user->type == User::TEACHER) {
-            $user = User::where('id', $id)
+        if ($teacher && $teacher->type == User::TEACHER) {
+            $teacher = User::where('id', $id)
                 ->with('studyMaterials.grade', 'studyMaterials.subject')
                 ->first();
-            $followers = $user->followers->count();
-            $followings = $user->followings->count();
-            $user['followers'] = $followers;
-            $user['followings'] = $followings;
+            $followers = $teacher->followers->count();
+            $followings = $teacher->followings->count();
+            $teacher['followers'] = $followers;
+            $teacher['followings'] = $followings;
             return $this->formatResponse('success', 'user-profile', $user);
         }
     }
