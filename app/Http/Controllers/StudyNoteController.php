@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\StudyMaterial;
 use App\Models\StudyNote;
 use App\Models\StudyNotesMedia;
 use App\Models\StudyNotesRating;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -22,8 +24,15 @@ class StudyNoteController extends Controller
      */
     public function index()
     {
-        $studyNotes = StudyNote::with('user','grade','subject')->paginate(15);
-        return $this->formatResponse('sucsess','all study note get',$studyNotes);
+        $studyMaterial = StudyNote::all();
+        $studyMaterialdata =[];
+        foreach ($studyMaterial as $key => $value) {
+            $studyMaterialdatas['studymaterial']= StudyMaterial::find($value->id);
+            $studyMaterialdatas['user']= User::find($value->user_id);
+            $studyMaterialdatas['is_follow']= User::isFollowed($value->user_id);
+            array_push($studyMaterialdata,$studyMaterialdatas);
+        }
+        return $studyMaterialdatas;
     }
 
     /**
