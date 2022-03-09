@@ -32,7 +32,7 @@ class UserActivity extends Controller
             $studyNotesRating->rating = $request->rating;
             $studyNotesRating->user_id = Auth::id();
             $studyNotesRating->save();
-            return $this->formatResponse('success', 'rating add sucessfully');
+            return $this->formatResponse('success', 'rating add successfully');
         }
         if ($request->type == "study-material") {
             $studyMaterialRating = new  StudyMaterialRating();
@@ -40,7 +40,7 @@ class UserActivity extends Controller
             $studyMaterialRating->rating = $request->rating;
             $studyMaterialRating->user_id = Auth::id();
             $studyMaterialRating->save();
-            return $this->formatResponse('success', 'rating add sucessfully');
+            return $this->formatResponse('success', 'rating add successfully');
         }
         if ($request->type == "past-paper") {
         }
@@ -52,11 +52,11 @@ class UserActivity extends Controller
         if ($check->isEmpty()) {
             $user = User::find(Auth::id());
             $user->followers()->attach($id);
-            return $this->formatResponse('sucess', 'follow sucessfull');
+            return $this->formatResponse('sucess', 'follow successfull');
         } else {
             $user = User::find(Auth::id());
             $user->followers()->detach($id);
-            return $this->formatResponse('sucess', 'un follow sucessfull');
+            return $this->formatResponse('sucess', 'un follow successfull');
         }
     }
     public function userProfile($id)
@@ -157,21 +157,21 @@ class UserActivity extends Controller
             $zoom->img = url('media/zoom_imgs/' . $zoomImg);
         }
         $zoom->save();
-        return $this->formatResponse('success','zoom created sucessfully',$zoom);
+        return $this->formatResponse('success','zoom created successfully',$zoom);
     }
     public function getZoomEvents()
     {
         $zoomEvents = Zoom::latest()->with('user')->get();
-        return $this->formatResponse('success','zoom events get sucessfully',$zoomEvents);
+        return $this->formatResponse('success','zoom events get successfully',$zoomEvents);
     }
     public function deleteZoomEvents($id)
     {
         $zoomEvent = Zoom::where('id',$id)->delete();
-        return $this->formatResponse('success','zoom events delete sucessfully');
+        return $this->formatResponse('success','zoom events delete successfully');
     }
     public function followerList($id)
     {
-        return User::where('id',$id)->with('followers')->get();
+        return User::where('id',$id)->select('id')->with('followers')->get();
     }
     public function followingList($id)
     {
