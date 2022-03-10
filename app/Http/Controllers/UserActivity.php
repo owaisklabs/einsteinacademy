@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Followe;
+use App\Models\ReportUser;
 use App\Models\StudyMaterialRating;
 use App\Models\StudyNotesRating;
 use App\Models\User;
@@ -176,5 +177,16 @@ class UserActivity extends Controller
     public function followingList($id)
     {
         return User::where('id',$id)->select('id')->with(['followings'])->get();
+    }
+    public function reportActivity(Request $request)
+    {
+//        return ReportUser::all();
+        $userActivity = new ReportUser();
+        $userActivity->type = $request->type;
+        $userActivity->activity_id = $request->id;
+        $userActivity->user_id =  Auth::id();
+        $userActivity->remarks =  $request->remarks;
+        $userActivity->save();
+        return $this->formatResponse('success','activity report successfully');
     }
 }

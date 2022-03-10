@@ -35,7 +35,7 @@ Route::middleware('auth:api')->group( function () {
 
     Route::get('follower-list/{id}',[UserActivity::class,'followerList']);
     Route::get('following-list/{id}',[UserActivity::class,'followingList']);
-    
+
     Route::get('user-profile/{id}',[UserActivity::class,'userProfile']);
     Route::put('user-profile-update/{id}',[UserActivity::class,'userProfileUpdate']);
     Route::post('profile-pic-update/{id}',[UserActivity::class,'profilePicUpdate']);
@@ -43,6 +43,8 @@ Route::middleware('auth:api')->group( function () {
     Route::post('zoom-event',[UserActivity::class,'createZoomEvent']);
     Route::get('zoom-event',[UserActivity::class,'getZoomEvents']);
     Route::get('zoom-event/{id}',[UserActivity::class,'deleteZoomEvents']);
+
+    Route::post('report-activity',[UserActivity::class,'reportActivity']);
 });
 // Route::get('/',[AuthController::class,'test']);
 Route::get('get-data',[InitController::class,'getData']);
