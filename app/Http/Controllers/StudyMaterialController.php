@@ -30,6 +30,7 @@ class StudyMaterialController extends Controller
                 $studyMaterialdatas['user']= User::find($value->user_id);
                 $studyMaterialdatas['is_follow']= User::isFollowed($value->user_id);
                 array_push($studyMaterialdata,$studyMaterialdatas);
+                return $studyMaterialdata;
             }
         }
         $studyMaterial = StudyMaterial::all();
