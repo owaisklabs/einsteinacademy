@@ -22,6 +22,16 @@ class StudyMaterialController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->type == User::TEACHER){
+            $studyMaterial = StudyMaterial::where('user_id',Auth::id());
+            $studyMaterialdata =[];
+            foreach ($studyMaterial as $key => $value) {
+                $studyMaterialdatas['studymaterial']= StudyMaterial::find($value->id);
+                $studyMaterialdatas['user']= User::find($value->user_id);
+                $studyMaterialdatas['is_follow']= User::isFollowed($value->user_id);
+                array_push($studyMaterialdata,$studyMaterialdatas);
+            }
+        }
         $studyMaterial = StudyMaterial::all();
         $studyMaterialdata =[];
         foreach ($studyMaterial as $key => $value) {
@@ -33,7 +43,7 @@ class StudyMaterialController extends Controller
         return $studyMaterialdata;
         return $this->formatResponse('success', 'get all study materials', $studyMaterial);
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
