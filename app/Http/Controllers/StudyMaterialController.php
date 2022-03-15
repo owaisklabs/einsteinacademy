@@ -101,12 +101,15 @@ class StudyMaterialController extends Controller
      */
     public function show($id)
     {
+//        return Auth::id();
         $studyMaterial = StudyMaterial::where('id',$id)
         ->with('grade','subject','Medias','user')->first();
         $studyMaterial['rating'] = StudyMaterialRating::where('study_material_id',$id)->avg('rating');
+        $studyMaterial['is_follow'] = User::isFollowed($studyMaterial->user->id);
         if( $studyMaterial['rating'] == NULL)
         $studyMaterial['rating'] =0;
         $studyMaterial['rating'] =   (float)number_format($studyMaterial['rating'], 2, '.', ' ');
+//        return $studyMaterial;
         return $this->formatResponse('success', 'get all study materials', $studyMaterial);
     }
 
