@@ -115,6 +115,7 @@ class AuthController extends Controller
         {
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
                 $user = User::find(Auth::id());
+                $user->email_verified_at= Carbon::now();
                 $user->save();
                 $user_token = new DeviceToken();
                 $user_token->user_id = Auth::id();
