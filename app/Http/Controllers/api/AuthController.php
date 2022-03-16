@@ -41,10 +41,13 @@ class AuthController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = $request->password;
+        if ($request->file('profile_img')){
+
         $file=$request->file('profile_img');
         $userProfileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
         Storage::disk('public_user_profile')->put($userProfileName, \File::get($file));
         $user->profile_img =url('media/user_profile/'.$userProfileName);
+        }
 
         if ($request->type == 0) {
             $user->type = User::STUDENT;
