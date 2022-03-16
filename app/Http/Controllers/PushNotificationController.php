@@ -24,7 +24,7 @@ class PushNotificationController extends Controller
      */
     public function create()
     {
-        //
+        return "here";
     }
 
     /**
