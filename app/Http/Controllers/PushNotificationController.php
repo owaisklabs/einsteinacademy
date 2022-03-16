@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\PushNotification;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PushNotificationController extends Controller
@@ -35,7 +37,36 @@ class PushNotificationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $firebaseToken[] = 'cjuDBAY1QieJeFTtmv_ulw:APA91bG_TVyNw-TfLTRTzhBQdD34xXLW7BtpgA6hqAzgKHKPbIyJAmCg6msW70oA6Id4_C8MGnTKA0NIgnGASA2tE6zIQDBBY99ysPjoiCcrl4Wlf2vBpGVgxapVh3jSyBtGLmii2BJl';
+
+        $SERVER_API_KEY = 'AAAAYybufUY:APA91bHGs-BAtISJaRhEWFCk79QKYrydolvdrl6loN1WhOmePN-PD8PLPzcB3sWD9iRO4Y5tQFR3g4poU_0cRkk0rhNePQt4OLnyBUsCCchzIgd9qpkVqw2pk5jEw2WybOLW3dMWaFnT';
+
+        $data = [
+            "registration_ids" => $firebaseToken,
+            "notification" => [
+                "title" => "Boss Reka",
+                "body" => 'Boss reka ',
+            ]
+        ];
+        $dataString = json_encode($data);
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        $response = curl_exec($ch);
+
+        dd($response);
     }
 
     /**

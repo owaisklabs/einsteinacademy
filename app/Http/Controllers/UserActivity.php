@@ -189,4 +189,14 @@ class UserActivity extends Controller
         $userActivity->save();
         return $this->formatResponse('success','activity report successfully');
     }
+    public function reportUser()
+    {
+        $reportUser = ReportUser::latest()->get();
+        return view('admin.user.report_user',get_defined_vars());
+    }
+    public function blockUser()
+    {
+        $userBlock = User::where('status',User::BLOCK)->get();
+        return view('admin.user.block_user',get_defined_vars());
+    }
 }

@@ -35,13 +35,6 @@
                                 <i class="fas fa-user green ml-1"></i>
                             </a>
                             <!-- Edit -->
-                            <a href="#" class="editButton">
-                                <i class="fas fa-edit blue ml-1"></i>
-                            </a>
-                            <!-- Delete -->
-                            <a href="#" class="deleteButton">
-                                <i class="fas fa-trash red ml-1"></i>
-                            </a>
 
                         </td>
                     </tr>
@@ -64,7 +57,7 @@
                     <form>
                         <div class="container-fluid">
                             <div class="row">
-                                <img src="https://flatlogic.github.io/light-blue-vue-admin/img/a5.84f014f0.jpg" style="height: 234px;" class="rounded mx-auto d-block" alt="...">
+                                <img src="" style="height: 234px;" class="rounded mx-auto d-block" alt="..." id="img">
                             <div class="form-group col-6">
                                 <label for="recipient-name" class=" col-form-label">Name:</label>
                                 <input type="text" class="form-control" readonly id="name">
@@ -129,6 +122,7 @@
                 data: '_token = <?php echo csrf_token(); ?>',
                 success: function(data) {
                     console.log(data);
+                    $('#exampleModal .modal-body #img').attr('src','{{ url('media/user_profile/no-image.jpg')}}')
                     $('#exampleModal .modal-body #name').val(data.name)
                     $('#exampleModal .modal-body #email').val(data.email)
                     $('#exampleModal .modal-body #type').val(data.type)

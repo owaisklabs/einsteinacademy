@@ -22,7 +22,7 @@ class StudyNoteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index()  
     {
         $studyMaterial = StudyNote::all();
         $studyMaterialdata =[];

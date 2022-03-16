@@ -8,4 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class ReportUser extends Model
 {
     use HasFactory;
+    public  function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+    public  function studyMaterial()
+    {
+        return $this->belongsTo(StudyMaterial::class,'activity_id');
+    }
+    public  function studyNote()
+    {
+        return $this->belongsTo(StudyNote::class,'activity_id');
+    }
+
 }

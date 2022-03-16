@@ -3,7 +3,7 @@
     <a href="#" class="nav-link">
         <i class="nav-icon fas fa-user"></i>
         <p>
-            User Mangement
+             User Mangement
             <i class="right fas fa-angle-left"></i>
         </p>
     </a>
@@ -15,15 +15,15 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="../../index2.html" class="nav-link">
+            <a href="{{route('report-user')}}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
                 <p>Repoted Users </p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="../../index3.html" class="nav-link">
+            <a href="{{route('block-user')}}" class="nav-link">
                 <i class="far fa-circle nav-icon"></i>
-                <p>Bloack Users</p>
+                <p>Block Users</p>
             </a>
         </li>
     </ul>
