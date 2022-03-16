@@ -46,6 +46,9 @@ class User extends Authenticatable
     ];
     const STUDENT = 'STUDENT';
     const TEACHER = 'TEACHER';
+
+    const BLOCK = 'BLOCK';
+    const UNBLOCK = 'UNBLOCK';
     public function setPasswordAttribute($pass)
     {
         $this->attributes['password'] = Hash::make($pass);
