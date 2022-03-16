@@ -6,15 +6,17 @@
     </div>
 
 
-    <form>
+    <form method="POST" action="{{route('push-notification.store')}}">
+        @csrf()
         <div class="card-body">
             <div class="form-group">
-                <label for="exampleInputEmail1">Title</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                <label for="title">Title</label>
+                <input type="text" name="title" required class="form-control" id="title" placeholder="Title of Notification">
             </div>
             <div class="form-group">
-                <label for="exampleInputPassword1">Body</label>
-                <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                <label for="body">Body</label>
+                <textarea type="text" name="body" required class="form-control" id="body" placeholder="Body of Notification">
+                </textarea>
             </div>
 
         </div>

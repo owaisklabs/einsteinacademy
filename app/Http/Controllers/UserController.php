@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ReportUser;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -81,5 +82,18 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function blockUser($id){
+        $userBlock = User::find($id);
+        $userBlock->status = User::BLOCK;
+        $userBlock->save();
+        $reortUser = ReportUser::where('user_id',$id)->delete();
+        return redirect()->back();
+    }
+    public function unBlockUser($id){
+        $userBlock = User::find($id);
+        $userBlock->status = User::UNBLOCK;
+        $userBlock->save();
+        return redirect()->back();
     }
 }

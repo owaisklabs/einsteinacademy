@@ -54,3 +54,4 @@ Route::post('otp-verify',[AuthController::class,'verifyOtp']);
 Route::post('signin',[AuthController::class,'SignIn']);
 Route::post('forget-password',[AuthController::class,'forgetPassword']);
 Route::post('otp-verify-forget-password',[AuthController::class,'verifyOtpForgetPassword']);
+ 

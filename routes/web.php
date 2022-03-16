@@ -30,12 +30,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('blocked-user/{id}',[UserController::class,'blockUser'])->name('blocked-user');
+    Route::get('un-blocked-user/{id}',[UserController::class,'unBlockUser'])->name('un-blocked-user');
+
     Route::get('user/{id}', [UserController::class, 'show'])->name('user');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::resource('/content', ContentController::class);
     Route::resource('/push-notification', PushNotificationController::class);
     Route::resource('/report-analytics', ReportAnalyticsController::class);
     Route::resource('/past-paper', PastPaperController::class);
+    Route::get('report-user',[\App\Http\Controllers\UserActivity::class,'reportUser'])->name('report-user');
+    Route::get('block-user',[\App\Http\Controllers\UserActivity::class,'blockUser'])->name('block-user');
 });
 
 
