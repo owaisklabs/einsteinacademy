@@ -67,6 +67,7 @@ class AuthController extends Controller
         $details = [
             'token' => $user_otp
         ];
+        Mail::to($request->email)->send(new OtpSendMail($details));
         $user->user_otp =$user_otp;
         $user->save();
         if ($request->subject) {
@@ -182,7 +183,7 @@ class AuthController extends Controller
         $details = [
             'token' => $user_otp,
         ];
-
+        Mail::to($request->email)->send(new OtpSendMail($details));
         $user->user_otp =$user_otp;
         $user->save();
         return $this->formatResponse('success','OTP code sent on email',$user_otp);
