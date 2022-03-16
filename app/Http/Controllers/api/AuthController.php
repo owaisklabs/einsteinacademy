@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OtpSendMail;
+use App\Models\DeviceToken;
 use App\Models\TeacherSubject;
 use App\Models\User;
 use Carbon\Carbon;
@@ -29,8 +30,7 @@ class AuthController extends Controller
             'city' => 'required',
             'country' => 'required',
             'password' => 'required',
-            'type' => 'required',
-            'profile_img' => 'required'
+            'type' => 'required'
         ]);
         if($validator->fails())
         {
@@ -101,6 +101,7 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
             'otp_code' => 'required |max:6',
+            'device_token' => 'required',
         ]);
         if($validator->fails()){
             return $this->sendError('validation error', $validator->errors());
@@ -111,8 +112,11 @@ class AuthController extends Controller
         {
             if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
                 $user = User::find(Auth::id());
-                $user->email_verified_at = Carbon::now();
                 $user->save();
+                $user_token = new DeviceToken();
+                $user_token->user_id = Auth::id();
+                $user_token->device = $request->device_token;
+                $user_token->save();
                 $success['user'] =  User::where('id',Auth::id())->with('grade','subjects')->get();
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
                 return $this->formatResponse('success','user-login sucessfully',$success);
@@ -136,7 +140,17 @@ class AuthController extends Controller
         {
             $user = Auth::user();
             if(!$user->email_verified_at)
-            return $this->formatResponse('error','Email not Verify',null,403);
+            {
+                return $this->formatResponse('error','Email not Verify',null,403);
+            }
+            if($user->status === User::BLOCK)
+            {
+                return $this->formatResponse('error','User is Blocked',null,403);
+            }
+            $user_token = new DeviceToken();
+            $user_token->user_id = Auth::id();
+            $user_token->device = $request->device_token;
+            $user_token->save();
             $success['token'] =  $user->createToken('MyApp')->accessToken;
             $success['user'] =  User::where('id',Auth::id())->with('grade','subjects')->first();
             // return response()->json([
