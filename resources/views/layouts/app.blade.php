@@ -10,6 +10,7 @@
           crossorigin="anonymous"/>
           <script src="{{ url('js/app.js') }}" defer></script>
           <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.ckeditor.com/4.18.0/standard/ckeditor.js"></script>
 
 
 
@@ -76,10 +77,8 @@
 
     <!-- Main Footer -->
     <footer class="main-footer">
-        <div class="float-right d-none d-sm-block">
-            <b>Version</b> 3.0.5
-        </div>
-        <strong>Copyright &copy; 2014-2020 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights
+
+        <strong>Copyright &copy; 2021-2022 <a href="https://www.einsteins-academy.com" target="_blank">Einstein Academy</a>.</strong> All rights
         reserved.
     </footer>
 </div>
