@@ -41,6 +41,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('/past-paper', PastPaperController::class);
     Route::get('report-user',[\App\Http\Controllers\UserActivity::class,'reportUser'])->name('report-user');
     Route::get('block-user',[\App\Http\Controllers\UserActivity::class,'blockUser'])->name('block-user');
+
+    Route::get('terms-and-condition',[\App\Http\Controllers\HomeController::class,'termsAndCondition'])->name('terms-and-condition');
+    Route::get('privacy-policy',[\App\Http\Controllers\HomeController::class,'privacyPolicy'])->name('privacy-policy');
+
+    Route::post('terms-and-condition',[\App\Http\Controllers\HomeController::class,'termsAndConditionStore'])->name('terms-and-condition');
+    Route::post('privacy-policy',[\App\Http\Controllers\HomeController::class,'privacyPolicyStore'])->name('privacy-policy');
+
 });
 
 

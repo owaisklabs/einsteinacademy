@@ -36,14 +36,14 @@
         <p>Past Papers</p>
     </a>
 </li>
-<li class="nav-item">
-    <a href="{{ route('content.index') }}" class="nav-link <?php if ($_SERVER['REQUEST_URI'] == '/content') {
-    echo 'active';
-} ?> ">
-        <i class="nav-icon fas fa-cogs"></i>
-        <p>Content Mangement </p>
-    </a>
-</li>
+{{--<li class="nav-item">--}}
+{{--    <a href="{{ route('content.index') }}" class="nav-link <?php if ($_SERVER['REQUEST_URI'] == '/content') {--}}
+{{--    echo 'active';--}}
+{{--} ?> ">--}}
+{{--        <i class="nav-icon fas fa-cogs"></i>--}}
+{{--        <p>Content Mangement </p>--}}
+{{--    </a>--}}
+{{--</li>--}}
 <li class="nav-item">
     <a href="{{ route('push-notification.index') }}" class="nav-link <?php if ($_SERVER['REQUEST_URI'] == '/push-notification') {
     echo 'active';
@@ -58,5 +58,21 @@
 } ?> ">
         <i class="nav-icon fas fa-chart-line"></i>
         <p>Report and Analytics</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('terms-and-condition') }}" class="nav-link <?php if ($_SERVER['REQUEST_URI'] == '/report-analytics') {
+    echo 'active';
+} ?> ">
+        <i class="nav-icon fa fa-wrench"></i>
+        <p>Terms and Conditions</p>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('privacy-policy') }}" class="nav-link <?php if ($_SERVER['REQUEST_URI'] == '/report-analytics') {
+    echo 'active';
+} ?> ">
+        <i class="nav-icon fa fa-cog"></i>
+        <p>Privacy Policy</p>
     </a>
 </li>

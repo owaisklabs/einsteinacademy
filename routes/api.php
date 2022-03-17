@@ -45,6 +45,8 @@ Route::middleware('auth:api')->group( function () {
     Route::get('zoom-event/{id}',[UserActivity::class,'deleteZoomEvents']);
 
     Route::post('report-activity',[UserActivity::class,'reportActivity']);
+    Route::get('privacy-policy',[HomeController::class,'privacyPolicy']);
+    Route::get('term-condition',[HomeController::class,'termsAndCondition']);
 });
 // Route::get('/',[AuthController::class,'test']);
 Route::get('get-data',[InitController::class,'getData']);
@@ -54,4 +56,4 @@ Route::post('otp-verify',[AuthController::class,'verifyOtp']);
 Route::post('signin',[AuthController::class,'SignIn']);
 Route::post('forget-password',[AuthController::class,'forgetPassword']);
 Route::post('otp-verify-forget-password',[AuthController::class,'verifyOtpForgetPassword']);
- 
+
