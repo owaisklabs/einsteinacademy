@@ -9,7 +9,7 @@
           integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
           crossorigin="anonymous"/>
           <script src="{{ url('js/app.js') }}" defer></script>
-          <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+          <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
 
 
