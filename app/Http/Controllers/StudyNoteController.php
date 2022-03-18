@@ -99,6 +99,7 @@ class StudyNoteController extends Controller
         ->first();
         $studyNotes['rating'] = StudyNotesRating::where('study_notes_id',$id)->avg('rating');
         //  $studyNotes['rating'] = (float) $studyNotes['rating'];
+        $studyNotes['is_follow']= User::isFollowed($studyNotes->user->id);
          $studyNotes['rating'] =   (float)number_format($studyNotes['rating'], 2, '.', ' ');
         return $this->formatResponse('success','study note get',$studyNotes);
     }

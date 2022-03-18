@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->group( function () {
     Route::get('/test',[AuthController::class,'test']);
 
+    Route::post('change-password',[AuthController::class,'changePassword']);
+
     Route::apiResource('/study-material',StudyMaterialController::class);
 
     Route::apiResource('/study-notes',StudyNoteController::class);

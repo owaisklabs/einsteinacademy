@@ -223,6 +223,28 @@ class AuthController extends Controller
         }
         // return $user;
     }
+    public function changePassword(Request  $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'new_password' => 'required'
+        ]);
+        if($validator->fails())
+        {
+            return $this->sendError('validation error', $validator->errors());
+        }
+        $user = User::find(Auth::id());
+        if (Hash::check($request->old_password, $user->password)){
+            $user->password = $request->new_password;
+            $user->save();
+            return  $this->formatResponse('success','password change successfully');
+        }
+        else{
+            return  $this->formatResponse('error','old password is not match',null,403);
+        }
+
+
+    }
     public function test()
     {
         // return 'hello';
