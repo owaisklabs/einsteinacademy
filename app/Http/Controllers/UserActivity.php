@@ -199,4 +199,21 @@ class UserActivity extends Controller
         $userBlock = User::where('status',User::BLOCK)->get();
         return view('admin.user.block_user',get_defined_vars());
     }
+    public function setting(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'material_notification' => 'required',
+            'following_notification' => 'required',
+            'rating_notification' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return $this->sendError('validation error', $validator->errors());
+        }
+        $user = User::find(Auth::id());
+        $user->material_notification = $request->material_notification;
+        $user->following_notification = $request->following_notification;
+        $user->rating_notification = $request->rating_notification;
+        $user->save();
+        return $this->formatResponse('success','user setting is successfully changed',$user);
+    }
 }
