@@ -23,7 +23,7 @@ class StudyMaterialController extends Controller
     public function index()
     {
         if (Auth::user()->type == User::TEACHER){
-            $studyMaterial = StudyMaterial::where('user_id',Auth::id())->get();
+            $studyMaterial = StudyMaterial::where('user_id',Auth::id())->with('grade','subject')->get();
             $studyMaterialdata =[];
             foreach ($studyMaterial as $key => $value) {
                 $studyMaterialdatas['studymaterial']= StudyMaterial::find($value->id);
@@ -34,7 +34,7 @@ class StudyMaterialController extends Controller
             return $studyMaterialdata;
         }
         else {
-            $studyMaterial = StudyMaterial::all();
+            $studyMaterial = StudyMaterial::with('grade','subject')->get()();
             $studyMaterialdata = [];
             foreach ($studyMaterial as $key => $value) {
                 $studyMaterialdatas['studymaterial'] = StudyMaterial::find($value->id);

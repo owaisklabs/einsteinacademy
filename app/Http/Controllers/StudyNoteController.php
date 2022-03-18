@@ -22,9 +22,9 @@ class StudyNoteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()  
+    public function index()
     {
-        $studyMaterial = StudyNote::all();
+        $studyMaterial = StudyNote::with('grade','subject')->get();
         $studyMaterialdata =[];
         foreach ($studyMaterial as $key => $value) {
             $studyMaterialdatas['studynotes']= StudyNote::find($value->id);
