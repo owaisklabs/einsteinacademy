@@ -27,7 +27,7 @@ class StudyNoteController extends Controller
         $studyMaterial = StudyNote::with('grade','subject')->get();
         $studyMaterialdata =[];
         foreach ($studyMaterial as $key => $value) {
-            $studyMaterialdatas['studynotes']= StudyNote::find($value->id);
+            $studyMaterialdatas['studynotes']= StudyNote::where('id',$value->id)->with('grade','subject')->first();
             $studyMaterialdatas['user']= User::find($value->user_id);
             $studyMaterialdatas['is_follow']= User::isFollowed($value->user_id);
             array_push($studyMaterialdata,$studyMaterialdatas);
