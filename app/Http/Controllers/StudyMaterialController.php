@@ -37,7 +37,7 @@ class StudyMaterialController extends Controller
             $studyMaterial = StudyMaterial::with('grade','subject')->get()();
             $studyMaterialdata = [];
             foreach ($studyMaterial as $key => $value) {
-                $studyMaterialdatas['studymaterial'] = StudyMaterial::find($value->id);
+                $studyMaterialdatas['studymaterial'] = StudyMaterial::where('id',$value->id)->with('grade','subject')->first();
                 $studyMaterialdatas['user'] = User::find($value->user_id);
                 $studyMaterialdatas['is_follow'] = User::isFollowed($value->user_id);
                 array_push($studyMaterialdata, $studyMaterialdatas);
