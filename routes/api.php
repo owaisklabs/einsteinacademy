@@ -46,6 +46,8 @@ Route::middleware('auth:api')->group( function () {
     Route::get('zoom-event',[UserActivity::class,'getZoomEvents']);
     Route::get('zoom-event/{id}',[UserActivity::class,'deleteZoomEvents']);
 
+    Route::post('setting',[UserActivity::class,'setting']);
+
     Route::post('report-activity',[UserActivity::class,'reportActivity']);
     Route::get('privacy-policy',[HomeController::class,'privacyPolicy']);
     Route::get('term-condition',[HomeController::class,'termsAndCondition']);
