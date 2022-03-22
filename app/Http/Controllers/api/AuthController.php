@@ -63,7 +63,7 @@ class AuthController extends Controller
         $user->city = $request->city;
         $user->country = $request->country;
         $user->institue_name = $request->institue_name;
-        $user_otp= rand(0, 9999);
+        $user_otp= rand(00000, 9999);
         $details = [
             'token' => $user_otp
         ];
@@ -90,7 +90,7 @@ class AuthController extends Controller
             return $this->sendError('validation error', $validator->errors());
         }
 
-        $user_otp= rand(0, 9999);
+        $user_otp= rand(0000, 9999);
         $details = [
             'token' => $user_otp
         ];
@@ -179,7 +179,11 @@ class AuthController extends Controller
         }
 
         $user= User::where('email',$request->email)->first();
+<<<<<<< HEAD
         $user_otp= rand(00000, 9999);
+=======
+        $user_otp= rand(0000, 9999);
+>>>>>>> 65bca1f712e61625a2140c78d9ad7c0dfcf20d7a
         $details = [
             'token' => $user_otp,
         ];
@@ -253,6 +257,20 @@ class AuthController extends Controller
             'imageUrl'=>User::find(Auth::id())->getFirstMedia('profile_images')->getFullUrl(),
         ];
         return $this->formatResponse('sucess',null,$data);
+
+    }
+    public function logout(Request $request){
+        $validator = Validator::make($request->all(), [
+            'fcm_token' => 'required',
+        ]);
+        if($validator->fails())
+        {
+            return $this->sendError('validation error', $validator->errors());
+        }
+        $request->user()->token()->revoke();
+        $user = User::find(Auth::id());
+        $user->userToken()->delete();
+        return  $this->formatResponse('success','user logout Successfully');
 
     }
 }

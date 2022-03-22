@@ -54,7 +54,7 @@ return [
 
     'url' => env('APP_URL', 'https://www.einsteins-academy.com'),
 
-    'asset_url' => env('http://localhost/einsteinAcademy', 'http://local/einsteinAcademy'),
+    'asset_url' => env('https://www.einsteins-academy.com/einsteinacademy', 'https://www.einsteins-academy.com/einsteinacademy'),
 
     /*
     |--------------------------------------------------------------------------
