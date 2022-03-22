@@ -179,11 +179,7 @@ class AuthController extends Controller
         }
 
         $user= User::where('email',$request->email)->first();
-<<<<<<< HEAD
-        $user_otp= rand(00000, 9999);
-=======
         $user_otp= rand(0000, 9999);
->>>>>>> 65bca1f712e61625a2140c78d9ad7c0dfcf20d7a
         $details = [
             'token' => $user_otp,
         ];
