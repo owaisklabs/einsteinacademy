@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Followe;
+use App\Models\Notification;
 use App\Models\ReportUser;
 use App\Models\StudyMaterialRating;
+use App\Models\StudyNote;
 use App\Models\StudyNotesRating;
 use App\Models\User;
 use App\Models\Zoom;
@@ -33,6 +35,46 @@ class UserActivity extends Controller
             $studyNotesRating->rating = $request->rating;
             $studyNotesRating->user_id = Auth::id();
             $studyNotesRating->save();
+//            $studyNotes = StudyNote::find($request->id);
+//            $user =  $studyNotes->user;
+//            $username = Auth::user()->name;
+//            $body = $username." Rated your Study Notes";
+//            if($user && $user->rating_notification ==1 ){
+//                $firebaseToken[] = 'em3t_EFxRPmFCgqxmmDG7y:APA91bEGOxShVYZTtQQ3HkAZXUZILpXJIiAqno0WPL4TQtqsuh9xs_agTb85bZ6CzAKsiCmR38cwQFpXINPkUFuM9KZbBLFSYJ4Gu2EaTEbRamZzNu51TN01Mo_beiuUK-fkAhEJz5Mn';
+//
+//                $SERVER_API_KEY = 'AAAAYybufUY:APA91bHGs-BAtISJaRhEWFCk79QKYrydolvdrl6loN1WhOmePN-PD8PLPzcB3sWD9iRO4Y5tQFR3g4poU_0cRkk0rhNePQt4OLnyBUsCCchzIgd9qpkVqw2pk5jEw2WybOLW3dMWaFnT';
+//
+//                $data = [
+//                    "registration_ids" => $firebaseToken,
+//                    "notification" => [
+//                        "title" => "Rating Notification",
+//                        "body" => $body,
+//                    ]
+//                ];
+//                $dataString = json_encode($data);
+//
+//                $headers = [
+//                    'Authorization: key=' . $SERVER_API_KEY,
+//                    'Content-Type: application/json',
+//                ];
+//
+//                $ch = curl_init();
+//
+//                curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+//                curl_setopt($ch, CURLOPT_POST, true);
+//                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//                curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+//
+//                $response = curl_exec($ch);
+//
+//                dd($response);
+//            }
+//            else{
+//                return "Nai hai bhai";
+//            }
+
             return $this->formatResponse('success', 'rating add successfully');
         }
         if ($request->type == "study-material") {
@@ -43,8 +85,7 @@ class UserActivity extends Controller
             $studyMaterialRating->save();
             return $this->formatResponse('success', 'rating add successfully');
         }
-        if ($request->type == "past-paper") {
-        }
+
     }
     public function follow($id)
     {
@@ -53,6 +94,36 @@ class UserActivity extends Controller
         if ($check->isEmpty()) {
             $user = User::find(Auth::id());
             $user->followers()->attach($id);
+//            $firebaseToken[] = 'ccEnFY5BT1WSOz1cYbiNLS:APA91bG_q1PY6NhVBPYNRyuo-lhnpg2dLf7w7jD42q1cHXI4Gx8csY8AvxZC9zZl1lFpwtpCqW-GQyVLw2Eryi2xsncNUeQ8x7IkRKu1O6_GZrzR55aEm5sBmFpfnQt-5kQzHYfdRd4O';
+//
+//            $SERVER_API_KEY = 'AAAAYybufUY:APA91bHGs-BAtISJaRhEWFCk79QKYrydolvdrl6loN1WhOmePN-PD8PLPzcB3sWD9iRO4Y5tQFR3g4poU_0cRkk0rhNePQt4OLnyBUsCCchzIgd9qpkVqw2pk5jEw2WybOLW3dMWaFnT';
+//            $body = $user->name." started following you";
+//            $data = [
+//                "registration_ids" => $firebaseToken,
+//                "notification" => [
+//                    "title" => "Follow Notification",
+//                    "body" =>  $body,
+//                ]
+//            ];
+//            $dataString = json_encode($data);
+//
+//            $headers = [
+//                'Authorization: key=' . $SERVER_API_KEY,
+//                'Content-Type: application/json',
+//            ];
+//
+//            $ch = curl_init();
+//
+//            curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+//            curl_setopt($ch, CURLOPT_POST, true);
+//            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+//            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//            curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+//
+//            $response = curl_exec($ch);
+//
+//            dd($response);
             return $this->formatResponse('sucess', 'follow successfull');
         } else {
             $user = User::find(Auth::id());
@@ -215,5 +286,9 @@ class UserActivity extends Controller
         $user->rating_notification = $request->rating_notification;
         $user->save();
         return $this->formatResponse('success','user setting is successfully changed',$user);
+    }
+    public function notification(){
+        $notification = Notification::where('user_id',Auth::id)->get();
+        return $this->formatResponse('success','notification get',$notification);
     }
 }
