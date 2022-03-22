@@ -34,7 +34,7 @@ class StudyMaterialController extends Controller
             return $studyMaterialdata;
         }
         else {
-            $studyMaterial = StudyMaterial::with('grade','subject')->get()();
+            $studyMaterial = StudyMaterial::with('grade','subject')->get();
             $studyMaterialdata = [];
             foreach ($studyMaterial as $key => $value) {
                 $studyMaterialdatas['studymaterial'] = StudyMaterial::where('id',$value->id)->with('grade','subject')->first();
