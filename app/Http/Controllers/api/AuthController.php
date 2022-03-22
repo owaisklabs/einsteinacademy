@@ -63,7 +63,7 @@ class AuthController extends Controller
         $user->city = $request->city;
         $user->country = $request->country;
         $user->institue_name = $request->institue_name;
-        $user_otp= rand(00000, 9999);
+        $user_otp= rand(1111, 9999);
         $details = [
             'token' => $user_otp
         ];
@@ -90,7 +90,7 @@ class AuthController extends Controller
             return $this->sendError('validation error', $validator->errors());
         }
 
-        $user_otp= rand(0000, 9999);
+        $user_otp= rand(1111, 9999);
         $details = [
             'token' => $user_otp
         ];
@@ -179,7 +179,7 @@ class AuthController extends Controller
         }
 
         $user= User::where('email',$request->email)->first();
-        $user_otp= rand(0000, 9999);
+        $user_otp= rand(1111, 9999);
         $details = [
             'token' => $user_otp,
         ];

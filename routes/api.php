@@ -49,6 +49,8 @@ Route::middleware('auth:api')->group( function () {
 
     Route::post('setting',[UserActivity::class,'setting']);
 
+    Route::get('notification',[UserActivity::class,'notification']);
+
     Route::post('report-activity',[UserActivity::class,'reportActivity']);
     Route::get('privacy-policy',[HomeController::class,'privacyPolicy']);
     Route::get('term-condition',[HomeController::class,'termsAndCondition']);
