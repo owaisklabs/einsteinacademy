@@ -24,6 +24,7 @@ Route::middleware('auth:api')->group( function () {
     Route::get('/test',[AuthController::class,'test']);
 
     Route::post('change-password',[AuthController::class,'changePassword']);
+    Route::post('log-out',[AuthController::class,'logout']);
 
     Route::apiResource('/study-material',StudyMaterialController::class);
 
