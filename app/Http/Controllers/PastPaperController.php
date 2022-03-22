@@ -131,9 +131,6 @@ class PastPaperController extends Controller
     public function showApi($id)
     {
         $pastPaper = PastPaper::where('id',$id)->with('grade','subject','medias')->get();
-        $pastPaper['rating'] = PastPaperRating::where('study_material_id',$id)->avg('rating');
-        if( $pastPaper['rating'] == NULL)
-        $pastPaper['rating'] =0;
         return $this->formatResponse('sucess','get past paper',$pastPaper);
     }
 }
