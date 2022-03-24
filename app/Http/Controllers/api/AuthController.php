@@ -95,6 +95,7 @@ class AuthController extends Controller
             'token' => $user_otp
         ];
         $user=User::where('email',$request->email)->first();
+        Mail::to($request->email)->send(new OtpSendMail($details));
         $user->user_otp =$user_otp;
         $user->save();
         return $this->formatResponse('success','user register otp sent',$user_otp);
