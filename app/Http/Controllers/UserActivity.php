@@ -288,7 +288,8 @@ class UserActivity extends Controller
         return $this->formatResponse('success','user setting is successfully changed',$user);
     }
     public function notification(){
-        $notification = Notification::where('user_id',Auth::id)->get();
+
+        $notification = Notification::get();
         return $this->formatResponse('success','notification get',$notification);
     }
 }
