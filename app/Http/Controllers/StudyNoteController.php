@@ -133,8 +133,9 @@ class StudyNoteController extends Controller
      * @param  \App\Models\StudyNote  $studyNote
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(StudyNote $studyNote)
     {
-        return $id;
+        $studyNote->delete();
+        return $this->formatResponse('success','study-material-delete');
     }
 }

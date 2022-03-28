@@ -133,8 +133,9 @@ class StudyMaterialController extends Controller
      * @param  \App\Models\StudyMaterial  $studyMaterial
      * @return \Illuminate\Http\Response
      */
-    public function destroy()
+    public function destroy(StudyMaterial $studyMaterial)
     {
-        return "delete";
+        $studyMaterial->delete();
+        return $this->formatResponse('success','study-material-delete');
     }
 }
