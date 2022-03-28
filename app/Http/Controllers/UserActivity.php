@@ -29,63 +29,51 @@ class UserActivity extends Controller
             return $this->sendError('validation error', $validator->errors());
         }
         if ($request->type == "study-notes") {
-            $check=StudyNotesRating::where('user_id',Auth::id)
-                ->where('study_notes_id',$request->id)
-                ->first();
-            if ($check){
-                $check->study_notes_id = $request->id;
-                $check->rating = $request->rating;
-                $check->user_id = Auth::id();
-                $check->save();
-                return $this->formatResponse('success', 'rating add successfully');
-            }
-            else{
+
             $studyNotesRating = new  StudyNotesRating();
             $studyNotesRating->study_notes_id = $request->id;
             $studyNotesRating->rating = $request->rating;
             $studyNotesRating->user_id = Auth::id();
             $studyNotesRating->save();
-            return $this->formatResponse('success', 'rating add successfully');
+            $studyNotes = StudyNote::find($request->id);
+            $user = $studyNotes->user;
+            $firebaseToken[] =  $studyNotes->user->userToken->device;
+            $username = Auth::user()->name;
+            $body = $username." Rated your Study Notes";
+            if($firebaseToken && $user->rating_notification ==1 ){
+                $SERVER_API_KEY = 'AAAAYybufUY:APA91bHGs-BAtISJaRhEWFCk79QKYrydolvdrl6loN1WhOmePN-PD8PLPzcB3sWD9iRO4Y5tQFR3g4poU_0cRkk0rhNePQt4OLnyBUsCCchzIgd9qpkVqw2pk5jEw2WybOLW3dMWaFnT';
+                $data = [
+                    "registration_ids" => $firebaseToken,
+                    "notification" => [
+                        "title" => "Rating Notification",
+                        "body" => $body,
+                    ]
+                ];
+                $dataString = json_encode($data);
+                $headers = [
+                    'Authorization: key=' . $SERVER_API_KEY,
+                    'Content-Type: application/json',
+                ];
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+                $response = curl_exec($ch);
+                $notification = new Notification();
+                $notification->user_id = $user->id;
+                $notification->title = $username;
+                $notification->body = " Rated your Study Notes";
+                $notification->save();
+                return $this->formatResponse('success','ratting-add-successfully');
+
             }
-//            $studyNotes = StudyNote::find($request->id);
-//            $user =  $studyNotes->user;
-//            $username = Auth::user()->name;
-//            $body = $username." Rated your Study Notes";
-//            if($user && $user->rating_notification ==1 ){
-//                $firebaseToken[] = 'em3t_EFxRPmFCgqxmmDG7y:APA91bEGOxShVYZTtQQ3HkAZXUZILpXJIiAqno0WPL4TQtqsuh9xs_agTb85bZ6CzAKsiCmR38cwQFpXINPkUFuM9KZbBLFSYJ4Gu2EaTEbRamZzNu51TN01Mo_beiuUK-fkAhEJz5Mn';
-//
-//                $SERVER_API_KEY = 'AAAAYybufUY:APA91bHGs-BAtISJaRhEWFCk79QKYrydolvdrl6loN1WhOmePN-PD8PLPzcB3sWD9iRO4Y5tQFR3g4poU_0cRkk0rhNePQt4OLnyBUsCCchzIgd9qpkVqw2pk5jEw2WybOLW3dMWaFnT';
-//
-//                $data = [
-//                    "registration_ids" => $firebaseToken,
-//                    "notification" => [
-//                        "title" => "Rating Notification",
-//                        "body" => $body,
-//                    ]
-//                ];
-//                $dataString = json_encode($data);
-//
-//                $headers = [
-//                    'Authorization: key=' . $SERVER_API_KEY,
-//                    'Content-Type: application/json',
-//                ];
-//
-//                $ch = curl_init();
-//
-//                curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
-//                curl_setopt($ch, CURLOPT_POST, true);
-//                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//                curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
-//
-//                $response = curl_exec($ch);
-//
-//                dd($response);
-//            }
-//            else{
-//                return "Nai hai bhai";
-//            }
+
+
+
 
 
         }
