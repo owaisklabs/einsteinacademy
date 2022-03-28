@@ -29,12 +29,24 @@ class UserActivity extends Controller
             return $this->sendError('validation error', $validator->errors());
         }
         if ($request->type == "study-notes") {
-
+            $check=StudyNotesRating::where('user_id',Auth::id)
+                ->where('study_notes_id',$request->id)
+                ->first();
+            if ($check){
+                $check->study_notes_id = $request->id;
+                $check->rating = $request->rating;
+                $check->user_id = Auth::id();
+                $check->save();
+                return $this->formatResponse('success', 'rating add successfully');
+            }
+            else{
             $studyNotesRating = new  StudyNotesRating();
             $studyNotesRating->study_notes_id = $request->id;
             $studyNotesRating->rating = $request->rating;
             $studyNotesRating->user_id = Auth::id();
             $studyNotesRating->save();
+            return $this->formatResponse('success', 'rating add successfully');
+            }
 //            $studyNotes = StudyNote::find($request->id);
 //            $user =  $studyNotes->user;
 //            $username = Auth::user()->name;
@@ -75,7 +87,7 @@ class UserActivity extends Controller
 //                return "Nai hai bhai";
 //            }
 
-            return $this->formatResponse('success', 'rating add successfully');
+
         }
         if ($request->type == "study-material") {
             $studyMaterialRating = new  StudyMaterialRating();
@@ -89,11 +101,13 @@ class UserActivity extends Controller
     }
     public function follow($id)
     {
-        $check = Followe::where('user_id', Auth::id())->where('follower_id', $id)->get();
+        $check = Followe::where('user_id', Auth::id())->where('follower_id', $id)->first();
         // return $check;
         if ($check->isEmpty()) {
-            $user = User::find(Auth::id());
-            $user->followers()->attach($id);
+            $follower = new Followe();
+            $follower->user_id = Auth::id();
+            $follower->follower_id = $id;
+            $follower->save();
 //            $firebaseToken[] = 'ccEnFY5BT1WSOz1cYbiNLS:APA91bG_q1PY6NhVBPYNRyuo-lhnpg2dLf7w7jD42q1cHXI4Gx8csY8AvxZC9zZl1lFpwtpCqW-GQyVLw2Eryi2xsncNUeQ8x7IkRKu1O6_GZrzR55aEm5sBmFpfnQt-5kQzHYfdRd4O';
 //
 //            $SERVER_API_KEY = 'AAAAYybufUY:APA91bHGs-BAtISJaRhEWFCk79QKYrydolvdrl6loN1WhOmePN-PD8PLPzcB3sWD9iRO4Y5tQFR3g4poU_0cRkk0rhNePQt4OLnyBUsCCchzIgd9qpkVqw2pk5jEw2WybOLW3dMWaFnT';
@@ -126,8 +140,7 @@ class UserActivity extends Controller
 //            dd($response);
             return $this->formatResponse('sucess', 'follow successfull');
         } else {
-            $user = User::find(Auth::id());
-            $user->followers()->detach($id);
+            $check->delete();
             return $this->formatResponse('sucess', 'un follow successfull');
         }
     }
