@@ -103,7 +103,7 @@ class UserActivity extends Controller
     {
         $check = Followe::where('user_id', Auth::id())->where('follower_id', $id)->first();
         // return $check;
-        if ($check->isEmpty()) {
+        if ($check== null) {
             $follower = new Followe();
             $follower->user_id = Auth::id();
             $follower->follower_id = $id;
