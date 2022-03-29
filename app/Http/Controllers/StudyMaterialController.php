@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Followe;
+use App\Models\Notification;
 use App\Models\StudyMaterial;
 use App\Models\User;
 use App\Models\StudyMaterialMedia;
@@ -79,6 +81,53 @@ class StudyMaterialController extends Controller
         $studyMaterial->subject_id  = $request->subject_id;
         $studyMaterial->type  = $request->type;
         $studyMaterial->save();
+        $user=User::find(Auth::id());
+        $user_id= Followe::where('user_id',$user->id)->pluck('follower_id');
+        $user= User::whereIn('id',$user_id)->get();
+        $tokens =[];
+        foreach ($user as $item){
+            foreach ($item->userToken as $token)
+                array_push($tokens,$token->device) ;
+        }
+        $tokens;
+        $firebaseToken = $tokens ;
+
+        $SERVER_API_KEY = 'AAAAYybufUY:APA91bHGs-BAtISJaRhEWFCk79QKYrydolvdrl6loN1WhOmePN-PD8PLPzcB3sWD9iRO4Y5tQFR3g4poU_0cRkk0rhNePQt4OLnyBUsCCchzIgd9qpkVqw2pk5jEw2WybOLW3dMWaFnT';
+        $body = Auth::user()->name." added Study Material";
+        $data = [
+            "registration_ids" => $firebaseToken,
+            "notification" => [
+                "title" => "Follow Notification",
+                "body" =>  $body,
+            ]
+        ];
+        $dataString = json_encode($data);
+
+        $headers = [
+            'Authorization: key=' . $SERVER_API_KEY,
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+         $response = curl_exec($ch);
+        foreach ($user_id as $item ){
+            $notification = new Notification();
+            $notification->user_id = $item;
+            $notification->title = Auth::user()->name;
+            $notification->body = " Uploaded Study Material";
+            $notification->save();
+        }
+
+
+
         if ($request->file('files')) {
             foreach ($request->file('files') as $file) {
                 $attachSatResultName = Str::random(20) . '.' . $file->getClientOriginalExtension();

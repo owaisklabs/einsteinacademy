@@ -78,7 +78,7 @@ class User extends Authenticatable
         return $this->hasMany(StudyNote::class,'user_id');
     }
     public function userToken(){
-        return $this->hasOne(DeviceToken::class,'user_id');
+        return $this->hasMany(DeviceToken::class,'user_id');
     }
 
     public static function isFollowed($follower_id){
