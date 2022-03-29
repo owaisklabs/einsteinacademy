@@ -345,4 +345,9 @@ class UserActivity extends Controller
         $notification = Notification::where('user_id',Auth::id())->get();
         return $this->formatResponse('success','notification get',$notification);
     }
+    public function removeFollower($id){
+        $check = Followe::where('user_id', $id)->where('follower_id', Auth::id())->first();
+        $check->delete();
+        return $this->formatResponse('success','remove follower');
+    }
 }
