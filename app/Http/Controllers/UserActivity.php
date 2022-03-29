@@ -147,7 +147,7 @@ class UserActivity extends Controller
             $firebaseToken = $token ;
 
             $SERVER_API_KEY = 'AAAAYybufUY:APA91bHGs-BAtISJaRhEWFCk79QKYrydolvdrl6loN1WhOmePN-PD8PLPzcB3sWD9iRO4Y5tQFR3g4poU_0cRkk0rhNePQt4OLnyBUsCCchzIgd9qpkVqw2pk5jEw2WybOLW3dMWaFnT';
-            $body = $user->name." started following you";
+            $body = Auth::user()->name." started following you";
             $data = [
                 "registration_ids" => $firebaseToken,
                 "notification" => [
