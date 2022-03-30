@@ -291,8 +291,8 @@ class UserActivity extends Controller
             return $this->sendError('validation error', $validator->errors());
         }
         $zoom = Zoom::find($id);
-        $zoom->title = $request->meeting_id;
-        $zoom->description = $request->meeting_pass;
+        $zoom->meeting_id = $request->meeting_id;
+        $zoom->meeting_pass = $request->meeting_pass;
         $zoom->save();
         return $this->formatResponse('success','zoom created successfully',$zoom);
     }
