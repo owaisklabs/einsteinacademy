@@ -45,6 +45,7 @@ Route::middleware('auth:api')->group( function () {
     Route::post('profile-pic-update/{id}',[UserActivity::class,'profilePicUpdate']);
 
     Route::post('zoom-event',[UserActivity::class,'createZoomEvent']);
+    Route::put('zoom-event/{id}',[UserActivity::class,'updateZoomEvent']);
     Route::get('zoom-event',[UserActivity::class,'getZoomEvents']);
     Route::get('zoom-event/{id}',[UserActivity::class,'deleteZoomEvents']);
 

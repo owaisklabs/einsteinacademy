@@ -260,8 +260,6 @@ class UserActivity extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'meeting_id' => 'required',
-            'meeting_pass' => 'required',
             'date_time' => 'required',
         ]);
         // return $request->all();
@@ -272,8 +270,6 @@ class UserActivity extends Controller
         $zoom->title = $request->title;
         $zoom->description = $request->description;
         $zoom->date_and_time = $request->date_time;
-        $zoom->meeting_id = $request->meeting_id;
-        $zoom->meeting_pass = $request->meeting_pass;
         $zoom->user_id =Auth::id();
         if($request->file('img')){
             $file = $request->file('img');
@@ -281,6 +277,22 @@ class UserActivity extends Controller
             Storage::disk('public_zoom_img')->put($zoomImg, \File::get($file));
             $zoom->img = url('media/zoom_imgs/' . $zoomImg);
         }
+        $zoom->save();
+        return $this->formatResponse('success','zoom created successfully',$zoom);
+    }
+    public function updateZoomEvent(Request $request,$id)
+    {
+        $validator = Validator::make($request->all(), [
+            'meeting_id' => 'required',
+            'meeting_pass' => 'required',
+        ]);
+        // return $request->all();
+        if ($validator->fails()) {
+            return $this->sendError('validation error', $validator->errors());
+        }
+        $zoom = Zoom::find($id);
+        $zoom->title = $request->meeting_id;
+        $zoom->description = $request->meeting_pass;
         $zoom->save();
         return $this->formatResponse('success','zoom created successfully',$zoom);
     }
