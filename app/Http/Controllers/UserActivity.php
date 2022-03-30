@@ -71,7 +71,7 @@ class UserActivity extends Controller
                 $notification = new Notification();
                 $notification->user_id = $user->id;
                 $notification->title = $username;
-                $notification->body = " Rated your Study Notes";
+                $notification->body = " rated your Study Notes";
                 $notification->save();
                 return $this->formatResponse('success','ratting-add-successfully');
             }
@@ -93,7 +93,7 @@ class UserActivity extends Controller
               $firebaseToken =   $token;
 //             return $firebaseToken;
             $username = Auth::user()->name;
-            $body = $username." Rated your Study Notes";
+            $body = $username." rated your Study Material";
             if($firebaseToken && $user->rating_notification ==1 ){
                 $SERVER_API_KEY = 'AAAAYybufUY:APA91bHGs-BAtISJaRhEWFCk79QKYrydolvdrl6loN1WhOmePN-PD8PLPzcB3sWD9iRO4Y5tQFR3g4poU_0cRkk0rhNePQt4OLnyBUsCCchzIgd9qpkVqw2pk5jEw2WybOLW3dMWaFnT';
                 $data = [
@@ -346,7 +346,7 @@ class UserActivity extends Controller
         return $this->formatResponse('success','notification get',$notification);
     }
     public function removeFollower($id){
-        $check = Followe::where('user_id', $id)->where('follower_id', Auth::id())->first();
+        $check = Followe::where('user_id',  Auth::id())->where('follower_id', $id)->first();
         $check->delete();
         return $this->formatResponse('success','remove follower');
     }
