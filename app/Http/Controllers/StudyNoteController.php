@@ -74,7 +74,7 @@ class StudyNoteController extends Controller
         $studyNote->type  = $request->type;
         $studyNote->save();
         $user=User::find(Auth::id());
-        $user_id= Followe::where('user_id',$user->id)->pluck('follower_id');
+        $user_id= Followe::where('follower_id',$user->id)->pluck('user_id');
         $user= User::whereIn('id',$user_id)->get();
         $tokens =[];
         foreach ($user as $item){
