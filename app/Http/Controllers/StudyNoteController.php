@@ -85,11 +85,11 @@ class StudyNoteController extends Controller
         $firebaseToken = $tokens ;
 
         $SERVER_API_KEY = 'AAAAYybufUY:APA91bHGs-BAtISJaRhEWFCk79QKYrydolvdrl6loN1WhOmePN-PD8PLPzcB3sWD9iRO4Y5tQFR3g4poU_0cRkk0rhNePQt4OLnyBUsCCchzIgd9qpkVqw2pk5jEw2WybOLW3dMWaFnT';
-        $body = Auth::user()->name." added Study Notes";
+        $body = Auth::user()->name." added Student Notes";
         $data = [
             "registration_ids" => $firebaseToken,
             "notification" => [
-                "title" => "Follow Notification",
+                "title" => "Student Notes Notification",
                 "body" =>  $body,
             ]
         ];
