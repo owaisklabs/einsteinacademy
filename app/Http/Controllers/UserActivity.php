@@ -347,6 +347,9 @@ class UserActivity extends Controller
     }
     public function removeFollower($id){
         $check = Followe::where('user_id',  Auth::id())->where('follower_id', $id)->first();
+        if ($check){
+            return $this->formatResponse('error','user not Found');
+        }
         $check->delete();
         return $this->formatResponse('success','remove follower');
     }
