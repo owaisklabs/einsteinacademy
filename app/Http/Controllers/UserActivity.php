@@ -369,7 +369,7 @@ class UserActivity extends Controller
     }
     public function followCount(){
         $user = User::find(Auth::id());
-        $follower = $user->followers->count();
+        $follower = $user->followings->count();
         return $this->formatResponse('success','get',$follower);
     }
 }
