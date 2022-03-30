@@ -367,4 +367,9 @@ class UserActivity extends Controller
         $check->delete();
         return $this->formatResponse('success','remove follower');
     }
+    public function followCount(){  
+        $user = User::find(Auth::id());
+        $follower = $user->followers->count();
+        return $this->formatResponse('success','get',$follower);
+    }
 }
