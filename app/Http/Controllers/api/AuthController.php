@@ -119,10 +119,10 @@ class AuthController extends Controller
                 $user = User::find(Auth::id());
                 $user->email_verified_at= Carbon::now();
                 $user->save();
-                $user_token = new DeviceToken();
-                $user_token->user_id = Auth::id();
-                $user_token->device = $request->device_token;
-                $user_token->save();
+//                $user_token = new DeviceToken();
+//                $user_token->user_id = Auth::id();
+//                $user_token->device = $request->device_token;
+//                $user_token->save();
                 $success['user'] =  User::where('id',Auth::id())->with('grade','subjects')->get();
                 $success['token'] =  $user->createToken('MyApp')->accessToken;
                 return $this->formatResponse('success','user-login sucessfully',$success);
@@ -137,6 +137,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
+            'device_token' => 'required',
         ]);
         if($validator->fails()){
             return $this->sendError('validation error', $validator->errors());
