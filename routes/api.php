@@ -37,8 +37,10 @@ Route::middleware('auth:api')->group( function () {
     Route::get('follow/{id}',[UserActivity::class,'follow']);
     Route::get('follower-remove/{id}',[UserActivity::class,'removeFollower']);
 
-    Route::get('follower-list/{id}',[UserActivity::class,'followerList']);
+    Route::get('follower- /{id}',[UserActivity::class,'followerList']);
     Route::get('following-list/{id}',[UserActivity::class,'followingList']);
+
+    Route::get('follow-count',[UserActivity::class,'followCount']);
 
     Route::get('user-profile/{id}',[UserActivity::class,'userProfile']);
     Route::put('user-profile-update/{id}',[UserActivity::class,'userProfileUpdate']);

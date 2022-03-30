@@ -130,8 +130,8 @@ class StudyMaterialController extends Controller
 
         if ($request->file('files')) {
             foreach ($request->file('files') as $file) {
-                $attachSatResultName = Str::random(20) . '.' . $file->getClientOriginalExtension();
-                Storage::disk('public_study_material')->put($attachSatResultName, \File::get($file));
+                $attachSatResultName = Str::random(20).'.' .$file->getClientOriginalExtension();
+                Storage::disk('public_study_material')->put($attachSatResultName,\File::get($file));
                 $media = new StudyMaterialMedia();
                 $media->name = $request->file_name;
                 $media->study_material_id = $studyMaterial->id;
