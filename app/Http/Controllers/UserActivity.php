@@ -71,7 +71,7 @@ class UserActivity extends Controller
                 $notification = new Notification();
                 $notification->user_id = $user->id;
                 $notification->title = $username;
-                $notification->body = " rated your Study Notes";
+                $notification->body = " rated your Student Notes";
                 $notification->save();
                 return $this->formatResponse('success','ratting-add-successfully');
             }
@@ -367,7 +367,7 @@ class UserActivity extends Controller
         $check->delete();
         return $this->formatResponse('success','remove follower');
     }
-    public function followCount(){  
+    public function followCount(){
         $user = User::find(Auth::id());
         $follower = $user->followers->count();
         return $this->formatResponse('success','get',$follower);
