@@ -137,22 +137,23 @@ class UserActivity extends Controller
             $follower = new Followe();
             $follower->user_id = Auth::id();
             $follower->follower_id = $id;
-            $user =User::find($id);
+            $user = User::find($id);
             $follower->save();
-            $token=[];
-            foreach ( $user->userToken as $item){
-                array_push($token,$item->device);
+            if ($user->following_notification) {
+            $token = [];
+            foreach ($user->userToken as $item) {
+                array_push($token, $item->device);
             }
 
-            $firebaseToken = $token ;
+            $firebaseToken = $token;
 
             $SERVER_API_KEY = 'AAAAYybufUY:APA91bHGs-BAtISJaRhEWFCk79QKYrydolvdrl6loN1WhOmePN-PD8PLPzcB3sWD9iRO4Y5tQFR3g4poU_0cRkk0rhNePQt4OLnyBUsCCchzIgd9qpkVqw2pk5jEw2WybOLW3dMWaFnT';
-            $body = Auth::user()->name." started following you";
+            $body = Auth::user()->name . " started following you";
             $data = [
                 "registration_ids" => $firebaseToken,
                 "notification" => [
                     "title" => "Follow Notification",
-                    "body" =>  $body,
+                    "body" => $body,
                 ]
             ];
             $dataString = json_encode($data);
@@ -177,7 +178,8 @@ class UserActivity extends Controller
             $notification->title = Auth::user()->name;
             $notification->body = " started following you";
             $notification->save();
-
+            return $this->formatResponse('sucess', 'follow successfull');
+        }
             return $this->formatResponse('sucess', 'follow successfull');
         } else {
             $check->delete();
