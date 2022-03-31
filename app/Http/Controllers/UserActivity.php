@@ -358,8 +358,8 @@ class UserActivity extends Controller
         return $this->formatResponse('success','notification get',$notification);
     }
     public function removeFollower($id){
-        $check = Followe::where('user_id',  Auth::id())
-            ->where('follower_id', $id)
+        $check = Followe::where('follower_id',  Auth::id())
+            ->where('user_id', $id)
             ->first();
         if (!$check){
             return $this->formatResponse('error','user not Found');
