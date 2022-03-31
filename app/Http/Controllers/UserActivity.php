@@ -174,7 +174,7 @@ class UserActivity extends Controller
             $response = curl_exec($ch);
             $notification = new Notification();
             $notification->user_id = $user->id;
-            $notification->title = $user->name;
+            $notification->title = Auth::user()->name;
             $notification->body = " started following you";
             $notification->save();
 
@@ -354,7 +354,7 @@ class UserActivity extends Controller
     }
     public function notification(){
 
-        $notification = Notification::where('user_id',Auth::id())->get();
+        $notification = Notification::where('user_id',Auth::id())->latest()->get();
         return $this->formatResponse('success','notification get',$notification);
     }
     public function removeFollower($id){
