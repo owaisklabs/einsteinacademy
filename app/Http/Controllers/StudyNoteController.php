@@ -78,6 +78,8 @@ class StudyNoteController extends Controller
         $user= User::whereIn('id',$user_id)->get();
         $tokens =[];
         foreach ($user as $item){
+            if($item->material_notification == 0)
+                continue;
             foreach ($item->userToken as $token)
                 array_push($tokens,$token->device) ;
         }
