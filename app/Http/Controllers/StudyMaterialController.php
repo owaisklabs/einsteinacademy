@@ -132,7 +132,7 @@ class StudyMaterialController extends Controller
 
         if ($request->file('files')) {
             foreach ($request->file('files') as $file) {
-                $attachSatResultName = $request->file_name.'.' .$file->getClientOriginalExtension();
+                $attachSatResultName = 'einstein_academy_material_'.Str::random(10).'.'.$file->getClientOriginalExtension();
                 Storage::disk('public_study_material')->put($attachSatResultName,\File::get($file));
                 $media = new StudyMaterialMedia();
                 $media->name = $request->file_name;

@@ -121,7 +121,7 @@ class StudyNoteController extends Controller
         }
         if ($request->file('files')) {
             foreach ($request->file('files') as $file) {
-                $attachSatResultName = $request->file_name. '.' . $file->getClientOriginalExtension();
+                $attachSatResultName = 'einstein_academy_notes_'.Str::random(10) .'.'. $file->getClientOriginalExtension();
                 Storage::disk('public_study_notes')->put($attachSatResultName, \File::get($file));
                 $media = new StudyNotesMedia();
                 $media->name = $request->file_name;
