@@ -24,4 +24,7 @@ class StudyNote extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
+    public function rating(){
+        return $this->hasMany(StudyMaterialRating::class,'study_material_id');
+    }
 }
