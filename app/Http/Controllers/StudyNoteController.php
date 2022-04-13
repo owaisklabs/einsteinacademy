@@ -26,12 +26,12 @@ class StudyNoteController extends Controller
      */
     public function index()
     {
-        $studyMaterial = StudyNote::with('grade','subject')->get();
+        $studyMaterial = StudyNote::with('grade','subject','syllabus')->get();
         $studyMaterialdata =[];
         foreach ($studyMaterial as $key => $value) {
             $studyMaterialdatas['studynotes']= StudyNote::where('id',$value->id)->with('grade','subject')->first();
             $studyMaterialdatas['user']= User::find($value->user_id);
-            $studyMaterialdatas['rating'] =$value->rating()->avg('rating');
+                $studyMaterialdatas['rating'] =$value->rating()->avg('rating');
 //            $studyMaterialdatas['is_follow']= User::isFollowed($value->user_id);
             array_push($studyMaterialdata,$studyMaterialdatas);
         }
@@ -60,6 +60,7 @@ class StudyNoteController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'subject_id' => 'required |numeric',
+            'syllabus_id' => 'required',
             'grade_id' => 'required |numeric',
             'files' => 'required',
             'type' => 'required',
@@ -72,6 +73,7 @@ class StudyNoteController extends Controller
         $studyNote->title  = $request->title;
         $studyNote->grade_id  = $request->grade_id;
         $studyNote->subject_id  = $request->subject_id;
+        $studyNote->syllabus_id  = $request->syllabus_id;
         $studyNote->type  = $request->type;
         $studyNote->save();
         $user=User::find(Auth::id());
@@ -144,7 +146,7 @@ class StudyNoteController extends Controller
     {
 
         $studyNotes = StudyNote::where('id',$id)
-        ->with('user','grade','subject','medias')
+        ->with('user','grade','subject','medias','syllabus')
         ->first();
         $studyNotes['rating'] = StudyNotesRating::where('study_notes_id',$id)->avg('rating');
         //  $studyNotes['rating'] = (float) $studyNotes['rating'];
