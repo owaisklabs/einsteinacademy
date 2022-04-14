@@ -31,17 +31,22 @@ class StudyMaterialController extends Controller
                 $studyMaterialdatas['studymaterial']= StudyMaterial::where('id',$value->id)->with('grade','subject')->first();
                 $studyMaterialdatas['user']= User::find($value->user_id);
                 $studyMaterialdatas['is_follow']= User::isFollowed($value->user_id);
+                $studyMaterialdatas['rating'] =$value->rating()->avg('rating');
                 array_push($studyMaterialdata,$studyMaterialdatas);
             }
             return $studyMaterialdata;
         }
         else {
-            $studyMaterial = StudyMaterial::with('grade','subject')->get();
+            $studyMaterial = StudyMaterial::with('grade','subject','rating')->get();
+//            return $studyMaterial[0]->rating()->avg('rating');
+//
+//            return $studyMaterial;
             $studyMaterialdata = [];
             foreach ($studyMaterial as $key => $value) {
                 $studyMaterialdatas['studymaterial'] = StudyMaterial::where('id',$value->id)->with('grade','subject')->first();
                 $studyMaterialdatas['user'] = User::find($value->user_id);
                 $studyMaterialdatas['is_follow'] = User::isFollowed($value->user_id);
+                $studyMaterialdatas['rating'] =$value->rating()->avg('rating');
                 array_push($studyMaterialdata, $studyMaterialdatas);
             }
             return $studyMaterialdata;
