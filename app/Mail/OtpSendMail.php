@@ -29,7 +29,7 @@ class OtpSendMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Einstein Academy OTP')
+        return $this->subject('EinsteinsAcademy OTP')
                     ->view('emails.sendotp');
     }
 }
